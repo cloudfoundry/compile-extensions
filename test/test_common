@@ -41,6 +41,15 @@ testCurlWhenTheFileFromTheUrlIsStreamed() {
     assertEquals 'some text' "$(curl http://files.com/file.txt -s)"
 }
 
+testCurlWhenTheFileFromTheUrlIsStreamedWithOutputParameter() {
+    mkdir $BUILDPACK_PATH/dependencies
+    source $BIN/common
+    touch $BUILDPACK_PATH/dependencies/http___files.com_file.txt
+    echo 'some text' > $BUILDPACK_PATH/dependencies/http___files.com_file.txt
+
+    assertEquals 'some text' "$(curl http://files.com/file.txt -s -o -)"
+}
+
 testCurlWhenTheFileFromTheUrlIsWrittenToAnOutputFile() {
     mkdir $BUILDPACK_PATH/dependencies
     source $BIN/common
