@@ -61,6 +61,19 @@ testCurlWhenTheFileFromTheUrlIsWrittenToAnOutputFile() {
     assertEquals 'some text' "$(cat $BUILDPACK_PATH/dependencies/output_file.txt)"
 }
 
+testCurlWhenTheFileFromTheUrlIsWrittenToAnOutputFileWhichIsNotProvided() {
+    mkdir $BUILDPACK_PATH/dependencies
+    source $BIN/common
+    touch $BUILDPACK_PATH/dependencies/http___files.com_file.txt
+    echo 'some text' > $BUILDPACK_PATH/dependencies/http___files.com_file.txt
+
+    curl -sO http://files.com/file.txt
+
+    assertEquals 'some text' "$(cat $PWD/file.txt)"
+
+    rm $PWD/file.txt
+}
+
 testCurlSupportsHttpsWhenOveridden() {
     mkdir $BUILDPACK_PATH/dependencies
     source $BIN/common

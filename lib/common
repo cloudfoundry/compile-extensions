@@ -3,7 +3,9 @@ then
     echo 'Use locally cached dependencies where possible'
 
     function curl() {
+        local http_url=''
         local write_file=''
+        local create_output_filename=''
 
         ## Split the arguments from curl command into an array
         IFS=' ' read -a curl_args <<< "$@"
@@ -15,6 +17,7 @@ then
             ## Does the argument start with http?
             if [[ $arg == http* ]]
             then
+                http_url=${arg}
                 filename=$(sed 's/[:\/]/_/g' <<< ${arg})
             fi
 
@@ -24,9 +27,21 @@ then
                 write_file=${curl_args[count+1]}
             fi
 
+            ## Does the argument write to a file but not provide a name?
+            if [[ ${arg} =~ ^-sO$ ]]
+            then
+                create_output_filename=true
+            fi
+
             # Increment counter
             let count+=1
         done
+
+        ## Do we have to generate a filename ourselves to write to?
+        if [[ -n "$create_output_filename" ]]
+        then
+            write_file=$(echo ${http_url} | rev | cut -d\/ -f1 | rev)
+        fi
 
         if test -f $BUILDPACK_PATH/dependencies/$filename
         then
