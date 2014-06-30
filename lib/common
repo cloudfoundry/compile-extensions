@@ -9,7 +9,6 @@ install_python() {
     else
         echo -n "-----> Installing Python 2.7.6..."
         ${BUILDPACK_PATH}/builds/runtimes/python-2.7.6 $PYTHONHOME > /dev/null 2>&1
-        mv $PYTHONHOME/bin/python2.7 $PYTHONHOME/bin/python
         echo "done"
     fi
 }
