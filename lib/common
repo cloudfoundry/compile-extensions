@@ -23,34 +23,29 @@ then
         local write_file=''
         local create_output_filename=''
 
-        ## Split the arguments from curl command into an array
-        IFS=' ' read -a curl_args <<< "$@"
+        # Read arguments and set to $@r
+        set -- $(getopt :o:Os $@;)
 
-        ## Iterate over each arg until we find one that starts with http
-        local count=0
-        for arg in "${curl_args[@]}"
+        for i
         do
-            ## Does the argument start with http?
-            if [[ $arg == http* ]]
-            then
-                http_url=${arg}
-                filename=$(sed 's/[:\/]/_/g' <<< ${arg})
-            fi
-
-            ## Does the argument have an output file?
-            if ([ ${arg} == "-o" ] && [ ${curl_args[count+1]} != "-" ])
-            then
-                write_file=${curl_args[count+1]}
-            fi
-
-            ## Does the argument write to a file but not provide a name?
-            if [[ ${arg} =~ ^-sO$ ]]
-            then
-                create_output_filename=true
-            fi
-
-            # Increment counter
-            let count+=1
+            case "$i"
+            in
+                -O)
+                    create_output_filename=true
+                    shift;;
+                -o)
+                    if [[ ${2} != "-" ]]
+                    then
+                        write_file=${2}
+                    fi
+                    shift; shift;;
+                -s)
+                    shift;;
+                --)
+                    http_url=${2}; shift;
+                    filename=$(sed 's/[:\/]/_/g' <<< ${http_url})
+                    shift;
+            esac
         done
 
         ## Do we have to generate a filename ourselves to write to?
@@ -71,7 +66,7 @@ then
                 cat $BUILDPACK_PATH/dependencies/$filename
             fi
         else
-            echo "Expected dependency to exist but could not find it: ${1}" 1>&2
+            echo "Expected dependency to exist but could not find it: ${http_url}" 1>&2
         fi
     }
 fi
