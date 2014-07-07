@@ -1,3 +1,18 @@
+install_python() {
+    cache=$(cd "$1/" && pwd)
+    export PYTHONHOME=$cache/python
+    export PATH=$PYTHONHOME/bin:$PATH
+
+    if test -d $PYTHONHOME
+    then
+        echo "-----> Python 2.7.6 already installed"
+    else
+        echo -n "-----> Installing Python 2.7.6..."
+        ${BUILDPACK_PATH}/builds/runtimes/python-2.7.6 $PYTHONHOME > /dev/null 2>&1
+        echo "done"
+    fi
+}
+
 if test -d $BUILDPACK_PATH/dependencies
 then
     echo 'Use locally cached dependencies where possible'
