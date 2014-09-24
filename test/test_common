@@ -83,6 +83,21 @@ testCurlSupportsHttpsWhenOveridden() {
     assertEquals 'some text' "$(curl https://files.com/file.txt -s)"
 }
 
+testEchoContentOfVersion() {
+    rm /tmp/echo_first_arg 2>/dev/null
+
+    cat() {
+      echo $1 > /tmp/echo_first_arg
+      echo '1.2.3'
+    }
+
+    OUTPUT=$(source $BIN/common)
+
+    unset -f cat
+
+    assertEquals '-------> Buildpack version 1.2.3' "$OUTPUT"
+    assertEquals 'VERSION' `cat /tmp/echo_first_arg`
+}
 # ==================================== Utilities ====================================
 function is_a_custom_function() {
     name=$1
