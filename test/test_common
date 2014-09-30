@@ -96,8 +96,9 @@ testEchoContentOfVersion() {
     unset -f cat
 
     assertEquals '-------> Buildpack version 1.2.3' "$OUTPUT"
-    assertEquals 'VERSION' `cat /tmp/echo_first_arg`
+    assertEquals "${BUILDPACK_PATH}/VERSION" `cat /tmp/echo_first_arg`
 }
+
 # ==================================== Utilities ====================================
 function is_a_custom_function() {
     name=$1
