@@ -1,8 +1,10 @@
 #!/bin/sh
+set -euo pipefail
 
 setUp() {
     export BUILDPACK_PATH=/tmp/common_spec
     mkdir -p $BUILDPACK_PATH
+    touch $BUILDPACK_PATH/VERSION
     rm -rf $BUILDPACK_PATH/dependencies
 }
 
@@ -84,10 +86,10 @@ testCurlSupportsHttpsWhenOveridden() {
 }
 
 testEchoContentOfVersion() {
-    rm /tmp/echo_first_arg 2>/dev/null
+    rm -f /tmp/echo_first_arg
 
     cat() {
-      echo $1 > /tmp/echo_first_arg
+      echo $1 >> /tmp/echo_first_arg
       echo '1.2.3'
     }
 
