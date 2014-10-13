@@ -69,7 +69,7 @@ then
                 cat $BUILDPACK_PATH/dependencies/$filename
             fi
         else
-            echo "Expected dependency to exist but could not find it: ${http_url}" 1>&2
+            echo "Resource ${http_url} is not provided by this buildpack. Please upgrade your buildpack to receive the latest resources." 1>&2
         fi
     }
 fi

@@ -29,7 +29,7 @@ testCurlWhenTheFileDoesNotExistAsADependency() {
     mkdir $BUILDPACK_PATH/dependencies
     source $BIN/common
 
-    expected_output="Expected dependency to exist but could not find it: http://files.com/file.txt"
+    expected_output="Resource http://files.com/file.txt is not provided by this buildpack. Please upgrade your buildpack to receive the latest resources."
 
     assertEquals "$expected_output" "$(curl http://files.com/file.txt -s 2>&1)"
 }
