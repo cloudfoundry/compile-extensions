@@ -12,79 +12,6 @@ tearDown() {
     unset BUILDPACK_PATH
 }
 
-testCurlIsNotOveriddenWhenThereAreNoDependencies() {
-    source $BIN/common
-
-    assertFalse 'curl is not overidden' $(is_a_custom_function curl)
-}
-
-testCurlIsOveriddenWhenThereAreDependencies() {
-    mkdir $BUILDPACK_PATH/dependencies
-    source $BIN/common
-
-    assertTrue 'curl is overidden' $(is_a_custom_function curl)
-}
-
-testCurlWhenTheFileDoesNotExistAsADependency() {
-    mkdir $BUILDPACK_PATH/dependencies
-    source $BIN/common
-
-    expected_output="Resource http://files.com/file.txt is not provided by this buildpack. Please upgrade your buildpack to receive the latest resources."
-
-    assertEquals "$expected_output" "$(curl http://files.com/file.txt -s 2>&1)"
-}
-
-testCurlWhenTheFileFromTheUrlIsStreamed() {
-    mkdir $BUILDPACK_PATH/dependencies
-    source $BIN/common
-    touch $BUILDPACK_PATH/dependencies/http___files.com_file.txt
-    echo 'some text' > $BUILDPACK_PATH/dependencies/http___files.com_file.txt
-
-    assertEquals 'some text' "$(curl http://files.com/file.txt -s)"
-}
-
-testCurlWhenTheFileFromTheUrlIsStreamedWithOutputParameter() {
-    mkdir $BUILDPACK_PATH/dependencies
-    source $BIN/common
-    touch $BUILDPACK_PATH/dependencies/http___files.com_file.txt
-    echo 'some text' > $BUILDPACK_PATH/dependencies/http___files.com_file.txt
-
-    assertEquals 'some text' "$(curl http://files.com/file.txt -s -o -)"
-}
-
-testCurlWhenTheFileFromTheUrlIsWrittenToAnOutputFile() {
-    mkdir $BUILDPACK_PATH/dependencies
-    source $BIN/common
-    touch $BUILDPACK_PATH/dependencies/http___files.com_file.txt
-    echo 'some text' > $BUILDPACK_PATH/dependencies/http___files.com_file.txt
-
-    curl -s -L -o $BUILDPACK_PATH/dependencies/output_file.txt http://files.com/file.txt
-
-    assertEquals 'some text' "$(cat $BUILDPACK_PATH/dependencies/output_file.txt)"
-}
-
-testCurlWhenTheFileFromTheUrlIsWrittenToAnOutputFileWhichIsNotProvided() {
-    mkdir $BUILDPACK_PATH/dependencies
-    source $BIN/common
-    touch $BUILDPACK_PATH/dependencies/http___files.com_file.txt
-    echo 'some text' > $BUILDPACK_PATH/dependencies/http___files.com_file.txt
-
-    curl -sO http://files.com/file.txt
-
-    assertEquals 'some text' "$(cat $PWD/file.txt)"
-
-    rm $PWD/file.txt
-}
-
-testCurlSupportsHttpsWhenOveridden() {
-    mkdir $BUILDPACK_PATH/dependencies
-    source $BIN/common
-    touch $BUILDPACK_PATH/dependencies/https___files.com_file.txt
-    echo 'some text' > $BUILDPACK_PATH/dependencies/https___files.com_file.txt
-
-    assertEquals 'some text' "$(curl https://files.com/file.txt -s)"
-}
-
 testEchoContentOfVersion() {
     rm -f /tmp/echo_first_arg
 
@@ -102,16 +29,6 @@ testEchoContentOfVersion() {
 }
 
 # ==================================== Utilities ====================================
-function is_a_custom_function() {
-    name=$1
-
-    if type $name | grep -q 'is a function$' 2>/dev/null
-    then
-        echo '0';
-    else
-        echo '1';
-    fi
-}
 
 BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN=$BASE/../lib

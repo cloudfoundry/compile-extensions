@@ -17,59 +17,12 @@ install_python() {
     fi
 }
 
-if test -d $BUILDPACK_PATH/dependencies
-then
-    echo 'Use locally cached dependencies where possible'
+translate_dependency_url() {
+    ${BUILDPACK_PATH}/compile-extensions/bin/translate_dependency_url $1
+}
 
-    function curl() {
-        local http_url=''
-        local write_file=''
-        local create_output_filename=''
-
-        # Read arguments and set to $@r
-        set -- $(getopt :o:Os $@;)
-
-        for i
-        do
-            case "$i"
-            in
-                -O)
-                    create_output_filename=true
-                    shift;;
-                -o)
-                    if [[ ${2} != "-" ]]
-                    then
-                        write_file=${2}
-                    fi
-                    shift; shift;;
-                -s)
-                    shift;;
-                --)
-                    http_url=${2}; shift;
-                    filename=$(sed 's/[:\/]/_/g' <<< ${http_url})
-                    shift;
-            esac
-        done
-
-        ## Do we have to generate a filename ourselves to write to?
-        if [[ -n "$create_output_filename" ]]
-        then
-            write_file=$(echo ${http_url} | rev | cut -d\/ -f1 | rev)
-        fi
-
-        if test -f $BUILDPACK_PATH/dependencies/$filename
-        then
-            ## Was a file to write to provided?
-            if [[ -n "$write_file" ]]
-            then
-                ## Write to file
-                cat $BUILDPACK_PATH/dependencies/$filename > $write_file
-            else
-                # Stream output
-                cat $BUILDPACK_PATH/dependencies/$filename
-            fi
-        else
-            echo "Resource ${http_url} is not provided by this buildpack. Please upgrade your buildpack to receive the latest resources." 1>&2
-        fi
-    }
-fi
+is_cached() {
+    set +e
+    ${BUILDPACK_PATH}/compile-extensions/bin/is_cached
+    return $?
+}
