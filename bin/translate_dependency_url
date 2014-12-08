@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 
 uri = ARGV[0]
-
-cache_path = File.join(ENV['BUILDPACK_PATH'], 'dependencies')
+cache_path = File.join(`pwd`.chomp, 'dependencies')
 
 if File.exist? cache_path
   file_path = File.join(cache_path, uri.gsub(/[\/:]/, '_'))

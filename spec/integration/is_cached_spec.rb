@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'is_cached command line predicate' do
-  let(:tmp_dir) { Dir.mktmpdir }
+  let(:buildpack_dir) { Dir.mktmpdir }
 
   before do
     ENV['BUILDPACK_PATH'] = tmp_dir

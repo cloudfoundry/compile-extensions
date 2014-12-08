@@ -1,31 +1,34 @@
 require 'spec_helper'
 
 describe 'translate_dependency_url' do
-  let(:tmp_dir) { Dir.mktmpdir }
-  let(:original_url) { 'http://thing.com/file.txt' }
-  let(:translated_url) { `./bin/translate_dependency_url #{original_url}` }
-
-  before do
-    ENV['BUILDPACK_PATH'] = tmp_dir
+  def run_translate
+    binary_file = File.expand_path('../../../bin/translate_dependency_url', __FILE__)
+    `cd #{buildpack_dir} && #{binary_file} #{original_url}`
   end
 
+  let(:buildpack_dir) { Dir.mktmpdir }
+  let(:original_url) { 'http://thing.com/file.txt' }
+
   after do
-    FileUtils.remove_entry tmp_dir
-    ENV.delete('BUILDPACK_PATH')
+    FileUtils.remove_entry buildpack_dir
   end
 
   context 'with a cache' do
     before do
-      `mkdir #{tmp_dir}/dependencies`
+      `mkdir #{buildpack_dir}/dependencies`
     end
 
     specify do
-      expect(translated_url).to eq("file://#{tmp_dir}/dependencies/http___thing.com_file.txt\n")
+      translated_url = run_translate
+
+      expect(translated_url).to eq("file://#{buildpack_dir}/dependencies/http___thing.com_file.txt\n")
     end
   end
 
   context 'without a cache' do
     specify do
+      translated_url = run_translate
+
       expect(translated_url).to eq "#{original_url}\n"
     end
   end
