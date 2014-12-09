@@ -41,7 +41,8 @@ dependencies:
       end
 
       specify do
-        translated_url, _, _ = run_translate
+        translated_url, stderr, _ = run_translate
+        puts stderr
 
         expect(translated_url).to eq("file://#{buildpack_dir}/dependencies/https___another_location_a_file_elsewhere.zip\n")
       end
@@ -68,7 +69,6 @@ dependencies:
         expect(translated_url).to eq "DEPENDENCY_MISSING_IN_MANIFEST: #{original_url}\n"
         expect(status).not_to be_success
       end
-
     end
   end
 end
