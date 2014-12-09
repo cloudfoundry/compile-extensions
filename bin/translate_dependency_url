@@ -1,34 +1,19 @@
 #!/usr/bin/env ruby
 
-require 'yaml'
+$LOAD_PATH << File.expand_path('../../lib', __FILE__)
+require 'dependencies'
 
 uri = ARGV[0]
 cache_path = File.join(`pwd`.chomp, 'dependencies')
 
-def find_matching_dependency(uri)
-  manifest = YAML.load_file('manifest.yml')
-  manifest['dependencies'].find do |dependency|
-    dependency['original'] == uri
-  end
-end
-
-def find_translated_dependency(uri)
-  matching_dependency = find_matching_dependency(uri)
-
-  if matching_dependency.nil?
-    puts "DEPENDENCY_MISSING_IN_MANIFEST: #{uri}"
-    exit 1
-  end
-
-  matching_dependency['xlated']
-end
+dependencies = Dependencies.new
 
 if File.exist? cache_path
-  file_path = File.join(cache_path, find_translated_dependency(uri).gsub(/[\/:]/, '_'))
+  file_path = File.join(cache_path, dependencies.find_translated_dependency(uri).gsub(/[\/:]/, '_'))
 
   puts "file://#{file_path}"
 else
-  puts find_translated_dependency(uri)
+  puts dependencies.find_translated_dependency(uri)
 end
 
 
