@@ -5,12 +5,12 @@ require 'compile_extensions'
 require 'yaml'
 
 uri = ARGV[0]
-cache_path = File.join(`pwd`.chomp, 'dependencies')
+cache_path = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'dependencies'))
 
-manifest = YAML.load_file('manifest.yml')
+manifest = YAML.load_file(File.join(File.dirname(__FILE__), '..', '..', 'manifest.yml'))
 dependencies = CompileExtensions::Dependencies.new(manifest)
 
-translated_uri = dependencies.find_translated_dependency(uri)
+translated_uri = dependencies.find_translated_url(uri)
 
 if translated_uri.nil?
   puts "DEPENDENCY_MISSING_IN_MANIFEST: #{uri}"
