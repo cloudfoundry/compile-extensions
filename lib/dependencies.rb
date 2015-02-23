@@ -1,5 +1,7 @@
 module CompileExtensions
   class Dependencies
+    ALL_STACKS_IDENTIFIER = "all"
+
     def initialize(manifest)
       @manifest = manifest
     end
@@ -46,8 +48,15 @@ module CompileExtensions
     def find_dependency_with_mapping(mapping)
       @manifest['dependencies'].find do |dependency|
         dependency['version'] == mapping['version'] &&
-            dependency['name'] == mapping['name']
+          dependency['name'] == mapping['name'] &&
+          dependency_satisfies_current_stack(dependency)
       end
+    end
+
+    def dependency_satisfies_current_stack(dependency)
+      return true if dependency['cf_stacks'] == ALL_STACKS_IDENTIFIER
+
+      dependency['cf_stacks'].include?(ENV['CF_STACK'])
     end
   end
 end
