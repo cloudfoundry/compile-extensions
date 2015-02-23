@@ -24,6 +24,11 @@ module CompileExtensions
               'version' => '1',
               'name' => 'both_stacks_widget'
             },
+            {
+              'match' => /lucid_stack_widget/,
+              'version' => '1',
+              'name' => 'lucid_stack_widget'
+            },
           ],
           'dependencies' => [
             {
@@ -44,43 +49,82 @@ module CompileExtensions
               'uri' => 'both_stacks_only',
               'cf_stacks' => ['first', 'second']
             },
+            {
+              'version' => '1',
+              'name' => 'lucid_stack_widget',
+              'uri' => 'lucid_stack_dep',
+              'cf_stacks' => ['lucid64']
+            },
+
           ]
         }
       end
 
-      context "first stack" do
+      let(:matching_dependency) { dependencies.find_matching_dependency(original_url) }
+
+      context 'environment uses first stack' do
         before do
           ENV['CF_STACK'] = 'first'
         end
 
-        specify do
-          matching_dependency = dependencies.find_matching_dependency('first_stack_widget')
+        context 'dependency that only matches the first stack' do
+          let(:original_url) { 'first_stack_widget' }
 
-          expect(matching_dependency["uri"]).to eql('first_stack_only')
+          specify do
+            expect(matching_dependency['uri']).to eql('first_stack_only')
+          end
         end
 
-        specify do
-          matching_dependency = dependencies.find_matching_dependency('any_stack_widget')
+        context 'dependency that will match any stack' do
+          let(:original_url) { 'any_stack_widget' }
 
-          expect(matching_dependency["uri"]).to eql('any_stack')
+          specify do
+            expect(matching_dependency['uri']).to eql('any_stack')
+          end
         end
       end
 
-      context "second stack" do
+      context 'environment uses second stack' do
         before do
           ENV['CF_STACK'] = 'second'
         end
 
-        specify do
-          matching_dependency = dependencies.find_matching_dependency('first_stack_widget')
+        context 'dependency that only matches the first stack' do
+          let(:original_url) { 'first_stack_widget' }
 
-          expect(matching_dependency).to be_nil
+          specify do
+            expect(matching_dependency).to be_nil
+          end
         end
 
-        specify do
-          matching_dependency = dependencies.find_matching_dependency('both_stacks_widget')
+        context 'dependency that will match first or second stack' do
+          let(:original_url) { 'both_stacks_widget' }
 
-          expect(matching_dependency['uri']).to eql('both_stacks_only')
+          specify do
+            expect(matching_dependency['uri']).to eql('both_stacks_only')
+          end
+        end
+      end
+
+      context 'environment does not tell us what stack it uses' do
+        before do
+          ENV.delete('CF_STACK')
+        end
+
+        context 'dependency that matches the lucid64 stack' do
+          let(:original_url) { 'lucid_stack_widget' }
+
+          specify do
+            expect(matching_dependency['uri']).to eql('lucid_stack_dep')
+          end
+        end
+
+        context 'dependency that does not match the lucid64 stack' do
+          let(:original_url) { 'first_stack_widget' }
+
+          specify do
+            expect(matching_dependency).to be_nil
+          end
         end
       end
     end

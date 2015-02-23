@@ -56,7 +56,11 @@ module CompileExtensions
     def dependency_satisfies_current_stack(dependency)
       return true if dependency['cf_stacks'] == ALL_STACKS_IDENTIFIER
 
-      dependency['cf_stacks'].include?(ENV['CF_STACK'])
+      dependency['cf_stacks'].include?(stack)
+    end
+
+    def stack
+      ENV['CF_STACK'] || 'lucid64'
     end
   end
 end
