@@ -1,7 +1,5 @@
 module CompileExtensions
   class Dependencies
-    ALL_STACKS_IDENTIFIER = "all"
-
     def initialize(manifest)
       @manifest = manifest
     end
@@ -54,8 +52,6 @@ module CompileExtensions
     end
 
     def dependency_satisfies_current_stack(dependency)
-      return true if dependency['cf_stacks'] == ALL_STACKS_IDENTIFIER
-
       dependency['cf_stacks'].include?(stack)
     end
 

@@ -39,12 +39,6 @@ module CompileExtensions
             },
             {
               'version' => '1',
-              'name' => 'any_stack_widget',
-              'uri' => 'any_stack',
-              'cf_stacks' => 'all'
-            },
-            {
-              'version' => '1',
               'name' => 'both_stacks_widget',
               'uri' => 'both_stacks_only',
               'cf_stacks' => ['first', 'second']
@@ -72,14 +66,6 @@ module CompileExtensions
 
           specify do
             expect(matching_dependency['uri']).to eql('first_stack_only')
-          end
-        end
-
-        context 'dependency that will match any stack' do
-          let(:original_url) { 'any_stack_widget' }
-
-          specify do
-            expect(matching_dependency['uri']).to eql('any_stack')
           end
         end
       end
@@ -154,19 +140,19 @@ module CompileExtensions
               'version' => 'one',
               'name' => 'my_dog',
               'uri' => 'my_dog_has_fleas-v1',
-              'cf_stacks' => 'all'
+              'cf_stacks' => ['lucid64']
             },
             {
               'version' => 'two',
               'name' => 'green',
               'uri' => 'i_do_not_like_green_eggs_and_ham-v2',
-              'cf_stacks' => 'all'
+              'cf_stacks' => ['lucid64']
             },
             {
               'version' => '1.9.3',
               'name' => 'ruby',
               'uri' => 'http://cf.buildpacks.com/ruby-1.9.3.tgz',
-              'cf_stacks' => 'all'
+              'cf_stacks' => ['lucid64']
             }
           ]
         }
