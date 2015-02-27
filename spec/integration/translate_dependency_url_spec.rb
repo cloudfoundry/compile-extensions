@@ -26,14 +26,20 @@ dependencies:
     name: ruby
     version: 1.9.3
     uri: http://thong.co.nz/file.tgz
+    cf_stacks:
+      - lucid64
   -
     name: ruby
     version: 2.1.1
     uri: http://some.other.repo/ruby-two-one-one.tgz
+    cf_stacks:
+      - lucid64
   -
     name: jruby
     version: 1.9.3::1.7.0
     uri: http://another.repo/jruby_1.9.3_jdk_1.7.0.tgz
+    cf_stacks:
+      - lucid64
     MANIFEST
   }
 
