@@ -19,10 +19,11 @@ end
 
 if File.exist? cache_path
   file_path = File.join(cache_path, translated_uri.gsub(/[\/:]/, '_'))
-
-  puts "file://#{file_path}"
-else
-  puts translated_uri
+  translated_uri = "file://#{file_path}"
 end
 
+if ENV['BP_DEBUG']
+  STDERR.puts "DEBUG: #{File.basename(__FILE__)}: #{translated_uri}"
+end
 
+puts translated_uri
