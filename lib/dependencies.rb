@@ -45,7 +45,7 @@ module CompileExtensions
 
     def find_dependency_with_mapping(mapping)
       @manifest['dependencies'].find do |dependency|
-        dependency['version'] == mapping['version'] &&
+        dependency['version'].to_s == mapping['version'].to_s &&
           dependency['name'] == mapping['name'] &&
           dependency_satisfies_current_stack(dependency)
       end
