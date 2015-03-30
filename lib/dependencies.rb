@@ -21,6 +21,14 @@ module CompileExtensions
       dependency['uri']
     end
 
+    def find_md5(uri)
+      dependency = find_matching_dependency(uri)
+
+      return nil if dependency.nil?
+
+      dependency['md5']
+    end
+
     private
 
     def transform_mapping_values(mapping, uri)
