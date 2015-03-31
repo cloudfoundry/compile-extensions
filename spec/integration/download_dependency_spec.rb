@@ -41,8 +41,8 @@ dependencies:
   let(:md5) { Digest::MD5.file(original_url).hexdigest }
 
   before do
-    base_dir = File.expand_path(File.join(File.dirname(__FILE__), "..", "..", ".."))
-    `cp -r #{base_dir}/compile-extensions #{buildpack_directory}/compile-extensions`
+    base_dir = File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
+    `cp -a #{base_dir} #{buildpack_directory}/compile-extensions`
   end
 
   context 'filename is in the manifest' do
