@@ -4,6 +4,7 @@ $LOAD_PATH << File.expand_path('../../lib', __FILE__)
 require 'yaml'
 require 'compile_extensions'
 require 'digest'
+require 'fileutils'
 
 original_url      = ARGV[0]
 install_directory = ARGV[1]
@@ -32,7 +33,7 @@ if dependency_md5 == generated_md5
   exit 0
 else
   FileUtils.rm(file_location)
-  exit 1
+  raise "MD5 for file downloaded from #{translated_uri} does not match MD5 in manifest."
 end
 
 if ENV['BP_DEBUG']
