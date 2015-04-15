@@ -4,6 +4,7 @@ $LOAD_PATH << File.expand_path('../../lib', __FILE__)
 require 'yaml'
 require 'compile_extensions'
 require 'digest'
+require 'fileutils'
 
 original_url      = ARGV[0]
 install_directory = ARGV[1]
