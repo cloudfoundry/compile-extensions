@@ -33,7 +33,7 @@ if dependency_md5 == generated_md5
   exit 0
 else
   FileUtils.rm(file_location)
-  exit 1
+  exit 3
 end
 
 if ENV['BP_DEBUG']
