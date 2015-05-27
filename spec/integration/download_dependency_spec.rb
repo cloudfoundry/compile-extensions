@@ -57,9 +57,10 @@ dependencies:
     context 'When downloaded file has invalid checksum' do
       let(:md5) { Digest::MD5.hexdigest('something else') }
 
-      it 'the process ends with the correct exit code' do
+      it %Q{the process ends with failing exit code,
+            and is '3' because of the PHP buildpack behaviour} do
         _, _, status = run_download_dependency
-        expect(status).not_to be_success
+        expect(status.exitstatus).to eq 3
       end
 
       it 'File is not present at the specified directory' do

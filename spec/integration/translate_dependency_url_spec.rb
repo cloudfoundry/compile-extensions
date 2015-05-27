@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'open3'
 
 describe 'translate_dependency_url' do
   def run_translate
