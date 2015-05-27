@@ -1,4 +1,4 @@
-set -euo pipefail
+set -eo pipefail
 
 echo "-------> Buildpack version $(cat $BUILDPACK_PATH/VERSION)"
 
