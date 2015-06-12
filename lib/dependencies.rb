@@ -64,7 +64,7 @@ module CompileExtensions
     end
 
     def stack
-      ENV['CF_STACK'] || 'lucid64'
+      ENV['CF_STACK'] || 'cflinuxfs2'
     end
   end
 end

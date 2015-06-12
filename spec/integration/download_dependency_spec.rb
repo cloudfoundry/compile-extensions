@@ -24,7 +24,7 @@ dependencies:
     version: 0
     uri: file://#{original_url}
     cf_stacks:
-      - lucid64
+      - cflinuxfs2
     md5: #{md5}
       MANIFEST
     end

@@ -25,9 +25,9 @@ module CompileExtensions
               'name' => 'both_stacks_widget'
             },
             {
-              'match' => /lucid_stack_widget/,
+              'match' => /cflinuxfs2_stack_widget/,
               'version' => '1',
-              'name' => 'lucid_stack_widget'
+              'name' => 'cflinuxfs2_stack_widget'
             },
           ],
           'dependencies' => [
@@ -45,9 +45,9 @@ module CompileExtensions
             },
             {
               'version' => '1',
-              'name' => 'lucid_stack_widget',
-              'uri' => 'lucid_stack_dep',
-              'cf_stacks' => ['lucid64']
+              'name' => 'cflinuxfs2_stack_widget',
+              'uri' => 'cflinuxfs2_stack_dep',
+              'cf_stacks' => ['cflinuxfs2']
             },
 
           ]
@@ -97,15 +97,15 @@ module CompileExtensions
           ENV.delete('CF_STACK')
         end
 
-        context 'dependency that matches the lucid64 stack' do
-          let(:original_url) { 'lucid_stack_widget' }
+        context 'dependency that matches the cflinuxfs2 stack' do
+          let(:original_url) { 'cflinuxfs2_stack_widget' }
 
           specify do
-            expect(matching_dependency['uri']).to eql('lucid_stack_dep')
+            expect(matching_dependency['uri']).to eql('cflinuxfs2_stack_dep')
           end
         end
 
-        context 'dependency that does not match the lucid64 stack' do
+        context 'dependency that does not match the cflinuxfs2 stack' do
           let(:original_url) { 'first_stack_widget' }
 
           specify do
@@ -140,19 +140,19 @@ module CompileExtensions
               'version' => 'one',
               'name' => 'my_dog',
               'uri' => 'my_dog_has_fleas-v1',
-              'cf_stacks' => ['lucid64']
+              'cf_stacks' => ['cflinuxfs2']
             },
             {
               'version' => 'two',
               'name' => 'green',
               'uri' => 'i_do_not_like_green_eggs_and_ham-v2',
-              'cf_stacks' => ['lucid64']
+              'cf_stacks' => ['cflinuxfs2']
             },
             {
               'version' => '1.9.3',
               'name' => 'ruby',
               'uri' => 'http://cf.buildpacks.com/ruby-1.9.3.tgz',
-              'cf_stacks' => ['lucid64']
+              'cf_stacks' => ['cflinuxfs2']
             }
           ]
         }
