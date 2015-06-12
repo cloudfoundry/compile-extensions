@@ -1,6 +1,0 @@
-#!/usr/bin/env ruby
-
-APP_CACHE_DIR = ARGV.first
-File.open(File.join(APP_CACHE_DIR, '.cf_stack'), 'w') do |file|
-  file.write ENV['CF_STACK']
-end
