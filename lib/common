@@ -26,15 +26,3 @@ is_cached() {
     ${BUILDPACK_PATH}/compile-extensions/bin/is_cached
     return $?
 }
-
-validate_app_cache() {
-    set +e
-    ${BUILDPACK_PATH}/compile-extensions/bin/validate_app_cache $1
-    return $?
-}
-
-store_stack_value() {
-    set +e
-    ${BUILDPACK_PATH}/compile-extensions/bin/store_stack_value $1
-    return $?
-}
