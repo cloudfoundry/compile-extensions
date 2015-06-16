@@ -57,7 +57,7 @@ If you at one point specified a buildpack that's at git URL, please make sure yo
       it 'exits unsucessfully' do
         stdout, stderr, process = run_check_stack_support(stack)
 
-        expect(process).not_to be_success
+        expect(process.exitstatus).to eq 44
       end
     end
 

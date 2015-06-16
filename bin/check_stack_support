@@ -15,5 +15,5 @@ If you're using the buildpack installed by your CF admin, please let your admin 
 If you at one point specified a buildpack that's at git URL, please make sure you're pointed at a version that supports this stack.
   HELPFUL_MESSAGE
 
-  exit 1
+  exit 44
 end
