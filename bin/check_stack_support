@@ -13,6 +13,13 @@ It looks like you're deploying on a stack that's not supported by this buildpack
 That could be because you're using a recent buildpack release on a deprecated stack.
 If you're using the buildpack installed by your CF admin, please let your admin know you saw this error message.
 If you at one point specified a buildpack that's at git URL, please make sure you're pointed at a version that supports this stack.
+ 
+If using a manifest file:
+Use #branch-name at the end of the url to specify a previous version, for example: 
+---
+applications:
+- buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git#v1.1.1
+ 
   HELPFUL_MESSAGE
 
   exit 44
