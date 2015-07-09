@@ -27,7 +27,10 @@ dependencies:
   end
 
   def run_check_stack_support(stack='')
-    Open3.capture3("env CF_STACK=#{stack} #{buildpack_dir}/compile-extensions/bin/check_stack_support")
+    Open3.capture3(
+      { 'CF_STACK'=>stack },
+      "#{buildpack_dir}/compile-extensions/bin/check_stack_support"
+    )
   end
 
   before do
@@ -47,7 +50,7 @@ dependencies:
       it 'gives a helpful error message in stderr' do
         stdout, stderr, process = run_check_stack_support(stack)
         expect(stderr).to include(<<-HELPFUL_ERROR_MESSAGE)
-It looks like you're deploying on a stack that's not supported by this buildpack.
+It looks like you're deploying on a stack (currently set to *lucid64*) that's not supported by this buildpack.
 That could be because you're using a recent buildpack release on a deprecated stack.
 If you're using the buildpack installed by your CF admin, please let your admin know you saw this error message.
 If you at one point specified a buildpack that's at git URL, please make sure you're pointed at a version that supports this stack.

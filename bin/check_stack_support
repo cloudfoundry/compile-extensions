@@ -9,7 +9,7 @@ end
 
 unless dependency
   warn <<-HELPFUL_MESSAGE
-It looks like you're deploying on a stack that's not supported by this buildpack.
+It looks like you're deploying on a stack (currently set to *#{ENV['CF_STACK'] || 'lucid64'}*) that's not supported by this buildpack.
 That could be because you're using a recent buildpack release on a deprecated stack.
 If you're using the buildpack installed by your CF admin, please let your admin know you saw this error message.
 If you at one point specified a buildpack that's at git URL, please make sure you're pointed at a version that supports this stack.
