@@ -50,6 +50,11 @@ dependencies:
         run_download_dependency
         expect(File).to exist("#{install_directory}/something.txt")
       end
+
+      it 'displays the translated uri to STDOUT' do
+        stdout, _, _ = run_download_dependency
+        expect(stdout.chomp).to eq modified_url
+      end
     end
 
 
