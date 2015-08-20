@@ -26,7 +26,7 @@ if File.exist? cache_path
   translated_uri = "file://#{file_path}"
 end
 
-`curl -s #{translated_uri} > #{file_location}`
+`curl -s #{translated_uri} -o #{file_location}`
 generated_md5 = Digest::MD5.file(file_location).hexdigest
 
 puts translated_uri
