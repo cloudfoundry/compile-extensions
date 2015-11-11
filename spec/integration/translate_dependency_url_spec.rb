@@ -70,6 +70,17 @@ dependencies:
     end
   end
 
+  context 'the url does not have matcher in the manifest' do
+    let(:original_url) { 'http://i_r.not/here' }
+
+    specify do
+      translated_url, _, status = run_translate
+
+      expect(translated_url).to eq ""
+      expect(status).to_not be_success
+    end
+  end
+
   context 'without a cache' do
     context 'the url has a matcher in the manifest' do
       context 'ruby 1.9.3' do
@@ -100,18 +111,6 @@ dependencies:
 
           expect(translated_url).to eq "http://another.repo/jruby_1.9.3_jdk_1.7.0.tgz\n"
         end
-      end
-
-    end
-
-    context 'the url does not have a matcher in the manifest' do
-      let(:original_url) { 'http://i_r.not/here' }
-
-      specify do
-        translated_url, _, status = run_translate
-
-        expect(translated_url).to eq "DEPENDENCY_MISSING_IN_MANIFEST: #{original_url}\n"
-        expect(status).not_to be_success
       end
     end
   end

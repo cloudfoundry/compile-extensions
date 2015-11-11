@@ -13,6 +13,26 @@ module CompileExtensions
       find_dependency_with_mapping(mapping)
     end
 
+    def find_dependency(uri)
+      mapping = find_dependency_mapping(uri)
+
+      return nil if mapping.nil?
+
+     transform_mapping_values(mapping, uri)
+    end
+
+    def valid_versions(dependency)
+      name = dependency['name']
+      matching_versions = []
+      @manifest['dependencies'].each do |dependency|
+        if dependency['name'] == name
+          matching_versions.push(dependency['version'])
+        end
+      end
+      matching_versions.sort.reverse
+    end
+
+
     def find_translated_url(uri)
       dependency = find_matching_dependency(uri)
 
