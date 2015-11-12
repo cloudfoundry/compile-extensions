@@ -153,6 +153,12 @@ module CompileExtensions
               'name' => 'ruby',
               'uri' => 'http://cf.buildpacks.com/ruby-1.9.3.tgz',
               'cf_stacks' => ['cflinuxfs2']
+            },
+            {
+              'version' => 1.9,
+              'name' => 'ruby',
+              'uri' => 'http://cf.buildpacks.com/ruby-1.9.tgz',
+              'cf_stacks' => ['cflinuxfs2']
             }
           ]
         }
@@ -219,6 +225,14 @@ module CompileExtensions
           specify do
             expect(translated_url).to be_nil
           end
+        end
+      end
+
+      describe 'returning versions on a similar dependency' do
+        let(:versions) { dependencies.valid_versions('name' => 'ruby') }
+
+        it 'returns a sorted list of versions' do
+          expect(versions).to eq ['1.9.3', '1.9']
         end
       end
     end

@@ -29,7 +29,7 @@ module CompileExtensions
           matching_versions.push(dependency['version'])
         end
       end
-      matching_versions.sort.reverse
+      matching_versions.collect(&:to_s).sort.reverse
     end
 
 
