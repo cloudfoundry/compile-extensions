@@ -1,5 +1,3 @@
-set -eo pipefail
-
 echo "-------> Buildpack version $(cat $BUILDPACK_PATH/VERSION)"
 
 install_python() {
@@ -22,7 +20,6 @@ translate_dependency_url() {
 }
 
 is_cached() {
-    set +e
     ${BUILDPACK_PATH}/compile-extensions/bin/is_cached
     return $?
 }
