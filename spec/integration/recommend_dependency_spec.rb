@@ -75,7 +75,7 @@ a binary and version number. Please replace this URL with a valid link.\n"
 
       expect(translated_url).to eq "DEPENDENCY MISSING IN MANIFEST: ruby 2.1.0
 
-It looks like you're trying to use ruby 2.1.0 (implied from #{original_url}).
+It looks like you're trying to use ruby 2.1.0.
 
 Unfortunately, that version of ruby is not supported by this buildpack.
 

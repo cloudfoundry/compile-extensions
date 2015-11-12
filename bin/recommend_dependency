@@ -23,7 +23,7 @@ a binary and version number. Please replace this URL with a valid link."
     versions = dependencies.valid_versions(dependency)
     puts "DEPENDENCY MISSING IN MANIFEST: #{dependency['name']} #{dependency['version']}
 
-It looks like you're trying to use #{dependency['name']} #{dependency['version']} (implied from #{uri}).
+It looks like you're trying to use #{dependency['name']} #{dependency['version']}.
 
 Unfortunately, that version of #{dependency['name']} is not supported by this buildpack.
 
