@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+require_relative '../lib/version'
+
+manifest_path = ARGV[0]
+dependency_name = ARGV[1]
+dependency_version = ARGV[2]
+
+manifest = YAML.load_file(manifest_path)
+go_dependencies = manifest['dependencies'].select {|dep| dep['name'] == dependency_name }
+
+def find_exact_version_match dependencies, target_version
+  dependencies.select { |dep| target_version == dep['version'].to_s }.first
+end
+
+def valid_semantic_version target_version
+  begin
+    Semantic::Version.new target_version
+  rescue ArgumentError => e
+    nil
+  end
+end
+
+def get_semanticially_valid_dependencies dependencies
+  dependencies.select { |dep| valid_semantic_version dep['version'] }
+end
+
+def get_major_minor_matches dependencies, target_version
+  dependencies.select do |dep|
+    dep_version = Semantic::Version.new dep['version']
+    target_version.major == dep_version.major && target_version.minor == dep_version.minor
+  end
+end
+
+def highest_patch_version_dependency dependencies
+  dependencies.max_by do |dep|
+    dep_version = Semantic::Version.new dep['version']
+    dep_version.patch
+  end
+end
+
+exact_match = find_exact_version_match go_dependencies, dependency_version
+
+if exact_match
+  print exact_match['version']
+else
+  if valid_semantic_version dependency_version
+    #Valid semantic version ex. 1.5.2
+    #if reached here, then semantic version does not exist in manifest.yml
+    print ''
+  else
+    #Invalid semantic version ex. 1.5
+    #if reached here, also does not exist in manifest.yml
+    input_version = Semantic::Version.new "#{dependency_version}.0"
+
+    semantically_valid_go_dependencies = get_semanticially_valid_dependencies go_dependencies
+    major_matched_go_dependencies = get_major_minor_matches semantically_valid_go_dependencies, input_version
+    highest_patch_version_dep = highest_patch_version_dependency major_matched_go_dependencies
+
+    if highest_patch_version_dep
+      print "#{highest_patch_version_dep['version']}"
+    else
+      print ''
+    end
+  end
+end
+
+exit 0
