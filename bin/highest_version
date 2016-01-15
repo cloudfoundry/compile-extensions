@@ -5,7 +5,7 @@ require_relative '../lib/version'
 
 manifest_path = ARGV[0]
 dependency_name = ARGV[1]
-dependency_version = ARGV[2]
+raw_dependency_version = ARGV[2]
 
 manifest = YAML.load_file(manifest_path)
 go_dependencies = manifest['dependencies'].select {|dep| dep['name'] == dependency_name }
@@ -39,6 +39,18 @@ def highest_patch_version_dependency dependencies
     dep_version.patch
   end
 end
+
+def remove_go_prepend godep_version
+  if godep_version =~ /^go\d+(\.\d+){1,2}$/
+    godep_version[2..-1]
+  else
+    ''
+  end
+end
+
+dependency_version = remove_go_prepend raw_dependency_version
+
+raise "invalid Godeps version '#{raw_dependency_version}'" if dependency_version == ''
 
 exact_match = find_exact_version_match go_dependencies, dependency_version
 
