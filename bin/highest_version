@@ -55,7 +55,7 @@ raise "invalid Godeps version '#{raw_dependency_version}'" if dependency_version
 exact_match = find_exact_version_match go_dependencies, dependency_version
 
 if exact_match
-  print exact_match['version']
+  print "#{dependency_name}#{exact_match['version']}"
 else
   if valid_semantic_version dependency_version
     #Valid semantic version ex. 1.5.2
@@ -71,7 +71,7 @@ else
     highest_patch_version_dep = highest_patch_version_dependency major_matched_go_dependencies
 
     if highest_patch_version_dep
-      print "#{highest_patch_version_dep['version']}"
+      print "#{dependency_name}#{highest_patch_version_dep['version']}"
     else
       print ''
     end

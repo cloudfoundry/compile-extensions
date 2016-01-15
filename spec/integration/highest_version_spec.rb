@@ -20,7 +20,7 @@ describe 'highest_version' do
 
     it 'returns an exact match of the selected version' do
       highest_version, _, status = run_highest_version(manifest_path, dependency, version)
-      expect(highest_version).to eq '1.5.2'
+      expect(highest_version).to eq 'go1.5.2'
       expect(status).to eq(0)
     end
   end
@@ -45,7 +45,7 @@ describe 'highest_version' do
     it 'returns an exact match of the selected version' do
       highest_version, _, status = run_highest_version(manifest_path, dependency, version)
 
-      expect(highest_version).to eq '1.5.3'
+      expect(highest_version).to eq 'go1.5.3'
       expect(status).to eq(0)
     end
   end
@@ -57,7 +57,7 @@ describe 'highest_version' do
     let(:manifest_path) { File.join(@base_dir, 'spec', 'fixtures', 'one_missing_patch_manifest.yml') }
     it 'returns highest minor version for specified major version' do
       highest_version, _, status = run_highest_version(manifest_path, dependency, version)
-      expect(highest_version).to eq '1.5'
+      expect(highest_version).to eq 'go1.5'
       expect(status).to eq(0)
     end
   end
@@ -70,7 +70,7 @@ describe 'highest_version' do
     it 'returns an exact match of the selected version' do
       highest_version, _, status = run_highest_version(manifest_path, dependency, version)
 
-      expect(highest_version).to eq '1.4.3'
+      expect(highest_version).to eq 'go1.4.3'
       expect(status).to eq(0)
     end
   end
