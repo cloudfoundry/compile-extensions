@@ -6,6 +6,7 @@ describe 'download_dependency' do
     Open3.capture3("#{buildpack_directory}/compile-extensions/bin/download_dependency #{file_path} #{install_directory}")
   end
 
+  let(:proxy) { Billy::Proxy.new }
   let(:buildpack_directory) { Dir.mktmpdir }
   let(:install_directory) { Dir.mktmpdir }
   let!(:manifest) do
@@ -95,6 +96,31 @@ dependencies:
     it 'does not download the file to the specified directory' do
       run_download_dependency
       expect(File).not_to exist("#{install_directory}/something_else.txt")
+    end
+  end
+
+  context 'download URI gives a redirect' do
+    let(:modified_url) { 'http://my.package.com/package.txt' }
+    let(:md5) { Digest::MD5.hexdigest 'blah blee' }
+
+    before do
+      proxy.start
+      proxy.stub('http://my.package.com/package.txt').
+        and_return(redirect_to: 'http://otherplace.com/thing.tgz')
+      proxy.stub('http://otherplace.com/thing.tgz').
+        and_return(text: "blah blee")
+      ENV['http_proxy'] = proxy.url
+    end
+
+    after do
+      proxy.reset
+      ENV['http_proxy'] = nil
+    end
+
+    it 'follows the redirect' do
+      run_download_dependency
+      expect(File).to exist("#{install_directory}/something.txt")
+      expect(File.read("#{install_directory}/something.txt")).to eq 'blah blee'
     end
   end
 end
