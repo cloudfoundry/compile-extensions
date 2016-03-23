@@ -62,8 +62,10 @@ dependencies:
 
       expect(translated_url).to eq "DEPENDENCY MISSING IN MANIFEST:
 
-Unfortunately, we are unable to resolve the dependency into
-a binary and version number. Please replace this URL with a valid link.\n"
+Unfortunately, we are either unable to resolve the dependency into
+a binary and version number or the requested version or version range is not supported.
+Please replace the URL with a valid link or the requested version/range
+with a supported version or version range.\n"
       expect(status).to be_success
     end
   end

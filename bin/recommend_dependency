@@ -17,8 +17,10 @@ if translated_uri.nil?
   if dependency.nil?
     puts "DEPENDENCY MISSING IN MANIFEST:
 
-Unfortunately, we are unable to resolve the dependency into
-a binary and version number. Please replace this URL with a valid link."
+Unfortunately, we are either unable to resolve the dependency into
+a binary and version number or the requested version or version range is not supported.
+Please replace the URL with a valid link or the requested version/range
+with a supported version or version range."
   else
     versions = dependencies.valid_versions(dependency)
     puts "DEPENDENCY MISSING IN MANIFEST: #{dependency['name']} #{dependency['version']}
