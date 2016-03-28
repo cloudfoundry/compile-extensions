@@ -37,6 +37,7 @@ end
 if dependency_md5 == generated_md5
   exit 0
 else
+  puts "DEPENDENCY_MD5_MISMATCH for #{translated_uri}: generated md5: #{generated_md5}, expected md5: #{dependency_md5}"
   FileUtils.rm(file_location)
   exit 3
 end
