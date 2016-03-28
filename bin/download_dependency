@@ -37,6 +37,7 @@ end
 if dependency_md5 == generated_md5
   exit 0
 else
+  puts "DEPENDENCY_MD5_MISMATCH for #{file_path}: generated_md5 : #{generated_md5}, Expected md5: #{dependency_md5}"
   FileUtils.rm(file_location)
   exit 3
 end
