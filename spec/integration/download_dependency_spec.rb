@@ -58,13 +58,14 @@ dependencies:
       end
     end
 
-
     context 'When downloaded file has invalid checksum' do
       let(:md5) { Digest::MD5.hexdigest('something else') }
 
       it %Q{the process ends with failing exit code,
             and is '3' because of the PHP buildpack behaviour} do
-        _, _, status = run_download_dependency
+        stdout, _, status = run_download_dependency
+        generated_checksum = Digest::MD5.file(file_path).hexdigest
+        expect(stdout.chomp).to match(/DEPENDENCY_MD5_MISMATCH for .*something\.txt: generated md5: #{Regexp.quote(generated_checksum)}, expected md5: #{Regexp.quote(md5)}/)
         expect(status.exitstatus).to eq 3
       end
 
