@@ -17,7 +17,7 @@ if translated_uri.nil?
 end
 
 if File.exist? cache_path
-  file_path = File.join(cache_path, translated_uri.gsub(/[\/:]/, '_'))
+  file_path = File.join(cache_path, translated_uri.gsub(/[\/:\?&]/, '_'))
   translated_uri = "file://#{file_path}"
 end
 

@@ -19,6 +19,10 @@ url_to_dependency_map:
     match: !ruby/regexp /\/jruby_(\\d+\\.\\d+\\.\\d+)_jdk_(\\d+\\.\\d+\\.\\d+).tgz/
     version: $1::$2
     name: jruby
+  -
+    match: dotnet-dev-ubuntu-x64\.(.*)\.tar\.gz
+    name: dotnet
+    version: $1
 
 dependencies:
   -
@@ -39,6 +43,12 @@ dependencies:
     uri: http://another.repo/jruby_1.9.3_jdk_1.7.0.tgz
     cf_stacks:
       - cflinuxfs2
+  -
+    name: dotnet
+    version: 1.0.0-preview2-003121
+    cf_stacks:
+      - cflinuxfs2
+    uri: https://some.cdn/with?parameters=true&secondParameter=present
     MANIFEST
   }
 
@@ -66,6 +76,20 @@ dependencies:
         translated_url, stderr, _ = run_translate
 
         expect(translated_url).to eq("file://#{buildpack_dir}/dependencies/http___thong.co.nz_file.tgz\n")
+      end
+    end
+
+    context 'when a url with parameters is defined in the manifest' do
+      let(:original_url) { 'https://some.url/dotnet-dev-ubuntu-x64.1.0.0-preview2-003121.tar.gz' }
+
+      before do
+        `mkdir #{buildpack_dir}/dependencies`
+      end
+
+      specify do
+        translated_url, stderr, _ = run_translate
+
+        expect(translated_url).to eq("file://#{buildpack_dir}/dependencies/https___some.cdn_with_parameters=true_secondParameter=present\n")
       end
     end
   end
@@ -110,6 +134,16 @@ dependencies:
           translated_url, _, _ = run_translate
 
           expect(translated_url).to eq "http://another.repo/jruby_1.9.3_jdk_1.7.0.tgz\n"
+        end
+      end
+
+      context 'dotnet 1.0.0-preview2-003121' do
+        let(:original_url) { 'https://original.com/dotnet-dev-ubuntu-x64.1.0.0-preview2-003121.tar.gz' }
+
+        specify do
+          translated_url, _, _ = run_translate
+
+          expect(translated_url).to eq "https://some.cdn/with?parameters=true&secondParameter=present\n"
         end
       end
     end
