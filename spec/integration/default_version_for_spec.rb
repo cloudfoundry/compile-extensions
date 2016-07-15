@@ -45,6 +45,18 @@ dependencies:
       expect(status.exitstatus).to eq 0
       expect(default_version).to eq '11.0.1'
     end
+
+    context "when BP_DEBUG is set" do
+      before { ENV['BP_DEBUG'] = 'true' }
+
+      after { ENV['BP_DEBUG'] = nil }
+
+      it 'logs the default version identified for the dependency when BP_DEBUG is set' do
+        output, _, status = default_version_for(buildpack_directory, manifest_path, dependency_name)
+        expect(status.exitstatus).to eq 0
+        expect(output).to include "DEBUG: default_version_for Testlang is 11.0.1"
+      end
+    end
   end
 
   shared_examples_for "erroring with helpful defaults misconfiguration message" do

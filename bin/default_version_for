@@ -27,6 +27,7 @@ class DefaultVersionIdentifier
     default_dependency_version = dependency_defaults.first['version']
     verify_availability_of_requested_dependency(requested_dependency_name, default_dependency_version, dependencies)
 
+    puts "DEBUG: default_version_for #{requested_dependency_name} is #{default_dependency_version}" if ENV['BP_DEBUG']
     print default_dependency_version
   end
 
