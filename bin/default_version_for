@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+
+class DefaultVersionIdentifier
+  attr_accessor :requested_dependency_name
+  attr_accessor :default_dependency_versions
+  attr_accessor :dependencies
+
+  def initialize(manifest_path, requested_dependency_name)
+    @requested_dependency_name = requested_dependency_name
+    manifest = YAML.load_file(manifest_path)
+    @default_dependency_versions = manifest['default_versions']
+    @dependencies = manifest['dependencies']
+  end
+
+  def defaults_misconfigured_error_message
+    "The buildpack manifest is misconfigured for defaults. " +
+    "Contact your Cloud Foundry operator/admin. For more information, see " +
+    "https://docs.cloudfoundry.org/buildpacks/specifying-default-versions-of-dependencies.html"
+  end
+
+  def run
+    dependency_defaults = default_dependency_versions.select { |default_dependency_versions_entry| default_dependency_versions_entry['name'] == requested_dependency_name }
+    verify_single_default_dependency_version_provided(dependency_defaults)
+
+    default_dependency_version = dependency_defaults.first['version']
+    verify_availability_of_requested_dependency(requested_dependency_name, default_dependency_version, dependencies)
+
+    print default_dependency_version
+  end
+
+  def verify_single_default_dependency_version_provided(dependency_defaults)
+    default_descriptions_found = dependency_defaults.size
+    if default_descriptions_found != 1
+      raise defaults_misconfigured_error_message
+    end
+  end
+
+  def verify_availability_of_requested_dependency(requested_dependency_name, default_dependency_version, dependencies)
+    matched_dependencies = dependencies.select { |dependency| dependency['name'] == requested_dependency_name && dependency['version'] == default_dependency_version }
+    if matched_dependencies.empty?
+      raise defaults_misconfigured_error_message
+    end
+  end
+end
+
+DefaultVersionIdentifier.new(ARGV[0], ARGV[1]).run
