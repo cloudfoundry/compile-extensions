@@ -148,4 +148,15 @@ dependencies:
 
     it_behaves_like "erroring with helpful defaults misconfiguration message"
   end
+
+  context "manifest with no 'default_versions' section" do
+    let(:manifest_contents) { <<-MANIFEST
+dependencies:
+  - name: Testlang
+    version: 11.0.2
+MANIFEST
+    }
+
+    it_behaves_like "erroring with helpful defaults misconfiguration message"
+  end
 end

@@ -10,7 +10,7 @@ class DefaultVersionIdentifier
   def initialize(manifest_path, requested_dependency_name)
     @requested_dependency_name = requested_dependency_name
     manifest = YAML.load_file(manifest_path)
-    @default_dependency_versions = manifest['default_versions']
+    @default_dependency_versions = manifest['default_versions'] || raise(defaults_misconfigured_error_message)
     @dependencies = manifest['dependencies']
   end
 
