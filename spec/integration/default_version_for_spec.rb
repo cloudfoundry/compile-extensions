@@ -10,18 +10,26 @@ describe 'default_version_for' do
   let(:dependency_name)        { 'Testlang' }
   let(:manifest_path)          { File.join(buildpack_directory, 'manifest.yml') }
   let(:defaults_error_message) { "The buildpack manifest is misconfigured for 'default_versions'. " +
-                                 "Contact your Cloud Foundry operator/admin. For more information, " +
-                                 "see https://docs.cloudfoundry.org/buildpacks/specifying-default-versions" }
+                                  'Contact your Cloud Foundry operator/admin. For more information, ' +
+                                  'see https://docs.cloudfoundry.org/buildpacks/specifying-default-versions' }
 
   before do
-    base_dir = File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
+    base_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
     `cp -a #{base_dir} #{buildpack_directory}/compile-extensions`
     File.open(manifest_path, 'w') do |file|
       file.write(manifest_contents)
     end
   end
 
-  context "manifest with correct default for the requested dependency" do
+  shared_examples_for 'erroring with helpful defaults misconfiguration message' do
+    it 'errors out with a helpful buildpack manifest defaults is misconfigured message' do
+      _, error_message, status = default_version_for(buildpack_directory, manifest_path, dependency_name)
+      expect(status.exitstatus).to eq 1
+      expect(error_message).to include defaults_error_message
+    end
+  end
+
+  context 'manifest with correct default for the requested dependency' do
     let(:manifest_contents) { <<-MANIFEST
 ---
 default_versions:
@@ -54,20 +62,12 @@ dependencies:
       it 'logs the default version identified for the dependency when BP_DEBUG is set' do
         output, _, status = default_version_for(buildpack_directory, manifest_path, dependency_name)
         expect(status.exitstatus).to eq 0
-        expect(output).to include "DEBUG: default_version_for Testlang is 11.0.1"
+        expect(output).to include 'DEBUG: default_version_for Testlang is 11.0.1'
       end
     end
   end
 
-  shared_examples_for "erroring with helpful defaults misconfiguration message" do
-    it 'errors out with a helpful buildpack manifest defaults is misconfigured message' do
-      _, error_message, status = default_version_for(buildpack_directory, manifest_path, dependency_name)
-      expect(status.exitstatus).to eq 1
-      expect(error_message).to include defaults_error_message
-    end
-  end
-
-  context "manifest with multiple defaults for the requested dependency" do
+  context 'manifest with multiple defaults for the requested dependency' do
     let(:manifest_contents) { <<-MANIFEST
 ---
 default_versions:
@@ -88,11 +88,11 @@ dependencies:
       MANIFEST
     }
 
-    it_behaves_like "erroring with helpful defaults misconfiguration message"
+    it_behaves_like 'erroring with helpful defaults misconfiguration message'
   end
 
-  context "manifest with a default that has no matching dependency" do
-    context "where the name is missing" do
+  context 'manifest with a default that has no matching dependency' do
+    context 'where the name is missing' do
       let(:manifest_contents) { <<-MANIFEST
 ---
 default_versions:
@@ -107,7 +107,7 @@ dependencies:
       MANIFEST
       }
 
-      it_behaves_like "erroring with helpful defaults misconfiguration message"
+      it_behaves_like 'erroring with helpful defaults misconfiguration message'
     end
 
     context "where the version is missing" do
@@ -127,11 +127,11 @@ dependencies:
       MANIFEST
       }
 
-      it_behaves_like "erroring with helpful defaults misconfiguration message"
+      it_behaves_like 'erroring with helpful defaults misconfiguration message'
     end
   end
 
-  context "manifest with no default for the requested dependency" do
+  context 'manifest with no default for the requested dependency' do
     let(:manifest_contents) { <<-MANIFEST
 ---
 default_versions:
@@ -146,7 +146,7 @@ dependencies:
       MANIFEST
     }
 
-    it_behaves_like "erroring with helpful defaults misconfiguration message"
+    it_behaves_like 'erroring with helpful defaults misconfiguration message'
   end
 
   context "manifest with no 'default_versions' section" do
@@ -157,6 +157,6 @@ dependencies:
 MANIFEST
     }
 
-    it_behaves_like "erroring with helpful defaults misconfiguration message"
+    it_behaves_like 'erroring with helpful defaults misconfiguration message'
   end
 end
