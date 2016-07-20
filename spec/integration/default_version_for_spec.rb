@@ -9,7 +9,7 @@ describe 'default_version_for' do
   let(:buildpack_directory)    { Dir.mktmpdir }
   let(:dependency_name)        { 'Testlang' }
   let(:manifest_path)          { File.join(buildpack_directory, 'manifest.yml') }
-  let(:defaults_error_message) { "The buildpack manifest is misconfigured for defaults. " +
+  let(:defaults_error_message) { "The buildpack manifest is misconfigured for 'default_versions'. " +
                                  "Contact your Cloud Foundry operator/admin. For more information, " +
                                  "see https://docs.cloudfoundry.org/buildpacks/specifying-default-versions" }
 
