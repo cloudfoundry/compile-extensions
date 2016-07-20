@@ -59,10 +59,10 @@ dependencies:
 
       after { ENV['BP_DEBUG'] = nil }
 
-      it 'logs the default version identified for the dependency when BP_DEBUG is set' do
-        output, _, status = default_version_for(buildpack_directory, manifest_path, dependency_name)
+      it 'logs the default version identified for the dependency to STDERR' do
+        _, stderr_output, status = default_version_for(buildpack_directory, manifest_path, dependency_name)
         expect(status.exitstatus).to eq 0
-        expect(output).to include 'DEBUG: default_version_for Testlang is 11.0.1'
+        expect(stderr_output).to include 'DEBUG: default_version_for Testlang is 11.0.1'
       end
     end
   end
