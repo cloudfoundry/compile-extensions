@@ -17,7 +17,7 @@ class DefaultVersionIdentifier
   def defaults_misconfigured_error_message
     "The buildpack manifest is misconfigured for 'default_versions'. " +
     'Contact your Cloud Foundry operator/admin. For more information, see ' +
-    'https://docs.cloudfoundry.org/buildpacks/specifying-default-versions-of-dependencies.html'
+    'https://docs.cloudfoundry.org/buildpacks/custom.html#specifying-default-versions'
   end
 
   def run
