@@ -44,3 +44,14 @@ Returns an exit status of `0` if the current buildpack is a cached buildpack.
 ```bash
 ./compile-extensions/bin/is_cached
 ```
+
+## default\_version\_for
+
+Returns the default version in the manifest (if specified) for a given dependency
+
+### Usage
+
+```bash
+./compile-extensions/bin/default_version_for [MANIFEST_FILE] [DEPENDENCY_NAME]
+[VERSION]
+```
