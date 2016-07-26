@@ -97,6 +97,26 @@ dependencies:
 
         expect(filtered_url).to eq("file://#{buildpack_dir}/dependencies/http___thong.co.nz_file.tgz\n")
       end
+
+      context 'python 2.7.11' do
+        let(:original_url) { 'https://python.com/2.7.11.tgz' }
+
+        specify do
+          filtered_url, _, _ = run_filter
+
+          expect(filtered_url).to eq "file://#{buildpack_dir}/dependencies/https___python-downloads.com_python-2.7.11-linux-x64.tgz\n"
+        end
+      end
+
+      context 'go 9.1.1' do
+        let(:original_url) { 'https://go-download.com/9.1.1.tar.gz' }
+
+        specify do
+          filtered_url, _, _ = run_filter
+
+          expect(filtered_url).to eq "file://#{buildpack_dir}/dependencies/https___go.com_9.1.1-go.tar.gz\n"
+        end
+      end
     end
 
     context 'when a url with parameters is defined in the manifest' do

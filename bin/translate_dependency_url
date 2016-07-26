@@ -5,4 +5,5 @@ require 'compile_extensions'
 require 'yaml'
 
 uri = ARGV[0]
-puts CompileExtensions::URITranslator.translate(uri)
+filter_credentials = false
+puts CompileExtensions::URITranslator.translate(uri, filter_credentials)

@@ -3,17 +3,7 @@
 $LOAD_PATH << File.expand_path('../../lib', __FILE__)
 require 'compile_extensions'
 require 'yaml'
-require 'uri'
 
 uri = ARGV[0]
-translated_uri = CompileExtensions::URITranslator.translate(uri)
-
-uri_obj = URI(translated_uri)
-if uri_obj.userinfo
-  uri_obj.user = nil
-  uri_obj.password = nil
-  puts uri_obj.to_s
-else
-  puts translated_uri
-end
-
+filter_credentials = true
+puts CompileExtensions::URITranslator.translate(uri, filter_credentials)
