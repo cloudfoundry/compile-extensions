@@ -18,8 +18,8 @@ module CompileExtensions
       if filter_credentials
         uri_obj = URI(translated_uri)
         if uri_obj.userinfo
-          uri_obj.user = nil
-          uri_obj.password = nil
+          uri_obj.user = "-redacted-" if uri_obj.user
+          uri_obj.password = "-redacted-" if uri_obj.password
           translated_uri = uri_obj.to_s
         end
       end

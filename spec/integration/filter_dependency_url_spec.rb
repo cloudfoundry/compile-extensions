@@ -104,7 +104,7 @@ dependencies:
         specify do
           filtered_url, _, _ = run_filter
 
-          expect(filtered_url).to eq "file://#{buildpack_dir}/dependencies/https___python-downloads.com_python-2.7.11-linux-x64.tgz\n"
+          expect(filtered_url).to eq "file://#{buildpack_dir}/dependencies/https___-redacted-_-redacted-@python-downloads.com_python-2.7.11-linux-x64.tgz\n"
         end
       end
 
@@ -114,7 +114,7 @@ dependencies:
         specify do
           filtered_url, _, _ = run_filter
 
-          expect(filtered_url).to eq "file://#{buildpack_dir}/dependencies/https___go.com_9.1.1-go.tar.gz\n"
+          expect(filtered_url).to eq "file://#{buildpack_dir}/dependencies/https___-redacted-@go.com_9.1.1-go.tar.gz\n"
         end
       end
     end
@@ -192,7 +192,7 @@ dependencies:
           specify do
             filtered_url, _, _ = run_filter
 
-            expect(filtered_url).to eq "https://python-downloads.com/python-2.7.11-linux-x64.tgz\n"
+            expect(filtered_url).to eq "https://-redacted-:-redacted-@python-downloads.com/python-2.7.11-linux-x64.tgz\n"
           end
         end
 
@@ -202,7 +202,7 @@ dependencies:
           specify do
             filtered_url, _, _ = run_filter
 
-            expect(filtered_url).to eq "https://go.com/9.1.1-go.tar.gz\n"
+            expect(filtered_url).to eq "https://-redacted-@go.com/9.1.1-go.tar.gz\n"
           end
         end
       end
