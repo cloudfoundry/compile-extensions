@@ -19,6 +19,10 @@ translate_dependency_url() {
     ${BUILDPACK_PATH}/compile-extensions/bin/translate_dependency_url $1
 }
 
+filter_dependency_url() {
+    ${BUILDPACK_PATH}/compile-extensions/bin/filter_dependency_url $1
+}
+
 is_cached() {
     ${BUILDPACK_PATH}/compile-extensions/bin/is_cached
     return $?
