@@ -2,10 +2,12 @@ require 'spec_helper'
 require 'open3'
 
 describe 'download_dependency' do
-  def run_download_dependency
-    Open3.capture3("#{buildpack_directory}/compile-extensions/bin/download_dependency #{file_path} #{install_directory}")
+  def run_download_dependency(input = file_path)
+    Open3.capture3("#{buildpack_directory}/compile-extensions/bin/download_dependency #{input} #{install_directory}")
   end
 
+  let(:credentials)  { 'login:password' }
+  let(:redacted)     { '-redacted-:-redacted-' }
   let(:proxy) { Billy::Proxy.new }
   let(:buildpack_directory) { Dir.mktmpdir }
   let(:install_directory) { Dir.mktmpdir }
@@ -54,7 +56,20 @@ dependencies:
 
       it 'displays the translated uri to STDOUT' do
         stdout, _, _ = run_download_dependency
-        expect(stdout.chomp).to eq modified_url
+        expect(stdout.chomp).to include(file_path)
+      end
+
+      context 'the uri contains credentials' do
+        let(:modified_url) { "file://#{credentials}@#{file_path}" }
+
+        it 'does not write credentials to STDOUT' do
+          stdout, _ , _ = run_download_dependency
+          expect(stdout.chomp).not_to include(credentials)
+        end
+        it 'it redacts credentials from STDOUT' do
+          stdout, _ , _ = run_download_dependency
+          expect(stdout.chomp).to include(redacted)
+        end
       end
     end
 
@@ -67,6 +82,19 @@ dependencies:
         generated_checksum = Digest::MD5.file(file_path).hexdigest
         expect(stdout.chomp).to match(/DEPENDENCY_MD5_MISMATCH for .*something\.txt: generated md5: #{Regexp.quote(generated_checksum)}, expected md5: #{Regexp.quote(md5)}/)
         expect(status.exitstatus).to eq 3
+      end
+
+      context 'the uri contains credentials' do
+        let(:modified_url) { "file://#{credentials}@#{file_path}" }
+
+        it 'does not write credentials to STDOUT' do
+          stdout, _ , _ = run_download_dependency
+          expect(stdout.chomp).not_to include(credentials)
+        end
+        it 'it redacts credentials from STDOUT' do
+          stdout, _ , _ = run_download_dependency
+          expect(stdout.chomp).to include(redacted)
+        end
       end
 
       it 'File is not present at the specified directory' do
@@ -82,6 +110,19 @@ dependencies:
       path = File.join(Dir.mktmpdir, 'something_else.txt')
       FileUtils.touch(path)
       path
+    end
+
+    context 'the the input contains credentials' do
+      let(:input) { "file://#{credentials}@#{file_path}" }
+
+      it 'does not write credentials to STDOUT' do
+        stdout, _ , _ = run_download_dependency(input)
+        expect(stdout.chomp).not_to include(credentials)
+      end
+      it 'it redacts credentials from STDOUT' do
+        stdout, _ , _ = run_download_dependency(input)
+        expect(stdout.chomp).to include(redacted)
+      end
     end
 
     it 'should display an error that the file is not in the manifest' do

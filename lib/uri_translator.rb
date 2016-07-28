@@ -16,12 +16,7 @@ module CompileExtensions
       end
 
       if filter_credentials
-        uri_obj = URI(translated_uri)
-        if uri_obj.userinfo
-          uri_obj.user = "-redacted-" if uri_obj.user
-          uri_obj.password = "-redacted-" if uri_obj.password
-          translated_uri = uri_obj.to_s
-        end
+        translated_uri=filter_uri(translated_uri)
       end
 
       if File.exist? cache_path
@@ -34,6 +29,21 @@ module CompileExtensions
       end
 
       translated_uri
+    end
+
+    def self.filter_uri(unsafe_uri)
+      return "" if unsafe_uri.nil?
+
+      uri_obj = URI(unsafe_uri)
+      if uri_obj.userinfo
+        uri_obj.user = "-redacted-" if uri_obj.user
+        uri_obj.password = "-redacted-" if uri_obj.password
+        safe_uri = uri_obj.to_s
+      else
+        safe_uri = uri_obj.to_s
+      end
+
+      safe_uri
     end
   end
 end

@@ -14,10 +14,12 @@ cache_path        = File.expand_path(File.join(File.dirname(__FILE__), '..', '..
 manifest          = YAML.load_file(manifest_location)
 dependencies      = CompileExtensions::Dependencies.new(manifest)
 translated_uri    = dependencies.find_translated_url(original_url)
+filtered_uri      = CompileExtensions::URITranslator.filter_uri(translated_uri)
 dependency_md5    = dependencies.find_md5(original_url)
 
 if translated_uri.nil?
-  puts "DEPENDENCY_MISSING_IN_MANIFEST: #{original_url}"
+  filtered_original = CompileExtensions::URITranslator.filter_uri(original_url)
+  puts "DEPENDENCY_MISSING_IN_MANIFEST: #{filtered_original}"
   exit 1
 end
 
@@ -29,15 +31,15 @@ end
 `curl -s -L #{translated_uri} -o #{file_location}`
 generated_md5 = Digest::MD5.file(file_location).hexdigest
 
-puts translated_uri
+puts filtered_uri
 if ENV['BP_DEBUG']
-  STDERR.puts "DEBUG: #{File.basename(__FILE__)}: #{translated_uri}"
+  STDERR.puts "DEBUG: #{File.basename(__FILE__)}: #{filtered_uri}"
 end
 
 if dependency_md5 == generated_md5
   exit 0
 else
-  puts "DEPENDENCY_MD5_MISMATCH for #{translated_uri}: generated md5: #{generated_md5}, expected md5: #{dependency_md5}"
+  puts "DEPENDENCY_MD5_MISMATCH for #{filtered_uri}: generated md5: #{generated_md5}, expected md5: #{dependency_md5}"
   FileUtils.rm(file_location)
   exit 3
 end
