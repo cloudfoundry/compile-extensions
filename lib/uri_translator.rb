@@ -3,7 +3,7 @@ require 'uri'
 
 module CompileExtensions
   module URITranslator
-    def self.translate(uri, filter_credentials = false)
+    def self.translate(uri)
       cache_path = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'dependencies'))
 
       manifest = YAML.load_file(File.join(File.dirname(__FILE__), '..', '..', 'manifest.yml'))
@@ -13,10 +13,6 @@ module CompileExtensions
 
       if translated_uri.nil?
         exit 1
-      end
-
-      if filter_credentials
-        translated_uri=filter_uri(translated_uri)
       end
 
       if File.exist? cache_path
@@ -33,17 +29,24 @@ module CompileExtensions
 
     def self.filter_uri(unsafe_uri)
       return "" if unsafe_uri.nil?
-
       uri_obj = URI(unsafe_uri)
       if uri_obj.userinfo
         uri_obj.user = "-redacted-" if uri_obj.user
         uri_obj.password = "-redacted-" if uri_obj.password
-        safe_uri = uri_obj.to_s
+      end
+
+      if uri_obj.scheme == 'file'
+        safe_uri = repair_file_uri(uri_obj)
       else
         safe_uri = uri_obj.to_s
       end
 
       safe_uri
+    end
+
+    def self.repair_file_uri(uri_obj)
+      ## URI("file:///directory/thing.tgz").to_s -> "file:/directory/thing.tgz"
+      uri_obj.to_s.sub("file:", "file://")
     end
   end
 end

@@ -28,8 +28,6 @@ if File.exist? cache_path
   file_path = File.join(cache_path, translated_uri.gsub(/[\/:\?&]/, '_'))
   translated_uri = "file://#{file_path}"
   filtered_uri = CompileExtensions::URITranslator.filter_uri(translated_uri)
-  ## URI("file:///directory/thing.tgz").to_s -> "file:/directory/thing.tgz"
-  filtered_uri = filtered_uri.sub("file:","file://")
 end
 
 `curl -s -L #{translated_uri} -o #{file_location}`
