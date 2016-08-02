@@ -16,7 +16,8 @@ module CompileExtensions
       end
 
       if File.exist? cache_path
-        file_path = File.join(cache_path, translated_uri.gsub(/[\/:\?&]/, '_'))
+        filtered_uri = filter_uri(translated_uri)
+        file_path = File.join(cache_path, filtered_uri.gsub(/[\/:\?&]/, '_'))
         translated_uri = "file://#{file_path}"
       end
 

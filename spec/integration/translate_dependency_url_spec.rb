@@ -23,6 +23,10 @@ url_to_dependency_map:
     match: dotnet-dev-ubuntu-x64\.(.*)\.tar\.gz
     name: dotnet
     version: $1
+  -
+    match: \/(python)(\\d+\\.\\d+\\.\\d+).tgz
+    version: $2
+    name: $1
 
 dependencies:
   -
@@ -35,6 +39,12 @@ dependencies:
     name: ruby
     version: 2.1.1
     uri: http://some.other.repo/ruby-two-one-one.tgz
+    cf_stacks:
+      - cflinuxfs2
+  -
+    name: python
+    version: 2.7.12
+    uri: http://login:password@some.other.repo/python2.7.12.tgz
     cf_stacks:
       - cflinuxfs2
   -
@@ -76,6 +86,22 @@ dependencies:
         translated_url, stderr, _ = run_translate
 
         expect(translated_url).to eq("file://#{buildpack_dir}/dependencies/http___thong.co.nz_file.tgz\n")
+      end
+    end
+
+    context 'when the url is defined in the manifest with authentication credentials' do
+      let(:original_url) { 'http://login:password@some.other.repo/python2.7.12.tgz' }
+
+      before do
+        `mkdir #{buildpack_dir}/dependencies`
+      end
+
+      specify do
+        translated_url, stderr, _ = run_translate
+        STDERR.puts "what"
+        STDERR.puts stderr
+
+        expect(translated_url).to eq("file://#{buildpack_dir}/dependencies/http___-redacted-_-redacted-@some.other.repo_python2.7.12.tgz\n")
       end
     end
 
