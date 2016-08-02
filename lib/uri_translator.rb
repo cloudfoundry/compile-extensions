@@ -37,11 +37,6 @@ module CompileExtensions
 
       if uri_obj.scheme == 'file'
         safe_uri = repair_file_uri(uri_obj)
-        if safe_uri.include? '/dependencies/'
-          /https?___(.*?)@.*/.match(safe_uri)
-          credentials = $1
-          safe_uri = safe_uri.gsub(credentials, '-redacted-_-redacted-') unless credentials.nil?
-        end
       else
         safe_uri = uri_obj.to_s
       end
