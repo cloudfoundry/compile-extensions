@@ -22,10 +22,6 @@ module CompileExtensions
         translated_uri = "file://#{file_path}"
       end
 
-      if ENV['BP_DEBUG']
-        STDERR.puts "DEBUG: #{File.basename(__FILE__)}: #{translated_uri}"
-      end
-
       translated_uri
     end
 

@@ -20,9 +20,6 @@ dependency_md5    = dependencies.find_md5(original_url)
 generated_md5 = Digest::MD5.file(file_location).hexdigest
 
 puts filtered_uri
-if ENV['BP_DEBUG']
-  STDERR.puts "DEBUG: #{File.basename(__FILE__)}: #{filtered_uri}"
-end
 
 if dependency_md5 == generated_md5
   exit 0
