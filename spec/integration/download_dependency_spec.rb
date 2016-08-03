@@ -25,7 +25,7 @@ dependencies:
   -
     name: something
     version: 0
-    uri: #{modified_url}
+    uri: #{manifest_url}
     cf_stacks:
       - cflinuxfs2
     md5: #{md5}
@@ -38,13 +38,34 @@ dependencies:
     File.write(path, 'something')
     path
   end
-  let(:modified_url) { "file://#{file_path}" }
+  let(:manifest_url) { "file://#{file_path}" }
 
   let(:md5) { Digest::MD5.file(file_path).hexdigest }
 
   before do
     base_dir = File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
     `cp -a #{base_dir} #{buildpack_directory}/compile-extensions`
+  end
+
+  context 'cache path exists' do
+    let(:url_body)             { "example.com/version-1.2.3/something.txt"}
+    let(:manifest_url)         { "https://#{credentials}@#{url_body}" }
+    let(:cached_file_location) { "#{buildpack_directory}/dependencies/https___-redacted-_-redacted-@#{url_body.gsub(/[\/:\?&]/, '_')}"}
+
+    before do
+      FileUtils.mkdir_p(File.join(buildpack_directory, 'dependencies'))
+      File.write(cached_file_location, 'something')
+    end
+
+    it 'downloads a uri to a specified directory' do
+      run_download_dependency(manifest_url)
+      expect(File).to exist("#{install_directory}/something.txt")
+    end
+
+    it 'displays the translated uri to STDOUT' do
+        stdout, _, _ = run_download_dependency(manifest_url)
+        expect(stdout.chomp).to include("file://#{cached_file_location}")
+    end
   end
 
   context 'filename is in the manifest' do
@@ -60,12 +81,13 @@ dependencies:
       end
 
       context 'the uri contains credentials' do
-        let(:modified_url) { "file://#{credentials}@#{file_path}" }
+        let(:manifest_url) { "file://#{credentials}@#{file_path}" }
 
         it 'does not write credentials to STDOUT' do
           stdout, _ , _ = run_download_dependency
           expect(stdout.chomp).not_to include(credentials)
         end
+
         it 'it redacts credentials from STDOUT' do
           stdout, _ , _ = run_download_dependency
           expect(stdout.chomp).to include(redacted)
@@ -85,12 +107,13 @@ dependencies:
       end
 
       context 'the uri contains credentials' do
-        let(:modified_url) { "file://#{credentials}@#{file_path}" }
+        let(:manifest_url) { "file://#{credentials}@#{file_path}" }
 
         it 'does not write credentials to STDOUT' do
           stdout, _ , _ = run_download_dependency
           expect(stdout.chomp).not_to include(credentials)
         end
+
         it 'it redacts credentials from STDOUT' do
           stdout, _ , _ = run_download_dependency
           expect(stdout.chomp).to include(redacted)
@@ -101,7 +124,6 @@ dependencies:
         run_download_dependency
         expect(File).not_to exist("#{install_directory}/something.txt")
       end
-
     end
   end
 
@@ -119,6 +141,7 @@ dependencies:
         stdout, _ , _ = run_download_dependency(input)
         expect(stdout.chomp).not_to include(credentials)
       end
+
       it 'it redacts credentials from STDOUT' do
         stdout, _ , _ = run_download_dependency(input)
         expect(stdout.chomp).to include(redacted)
@@ -142,7 +165,7 @@ dependencies:
   end
 
   context 'download URI gives a redirect' do
-    let(:modified_url) { 'http://my.package.com/package.txt' }
+    let(:manifest_url) { 'http://my.package.com/package.txt' }
     let(:md5) { Digest::MD5.hexdigest 'blah blee' }
 
     before do

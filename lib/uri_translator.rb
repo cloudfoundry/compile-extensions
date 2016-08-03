@@ -12,6 +12,7 @@ module CompileExtensions
       translated_uri = dependencies.find_translated_url(uri)
 
       if translated_uri.nil?
+        puts "DEPENDENCY_MISSING_IN_MANIFEST: #{filter_uri(uri)}"
         exit 1
       end
 

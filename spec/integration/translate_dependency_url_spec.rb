@@ -124,9 +124,9 @@ dependencies:
     let(:original_url) { 'http://i_r.not/here' }
 
     specify do
-      translated_url, _, status = run_translate
+      stdout, _, status = run_translate
 
-      expect(translated_url).to eq ""
+      expect(stdout).to eq "DEPENDENCY_MISSING_IN_MANIFEST: #{original_url}\n"
       expect(status).to_not be_success
     end
   end
