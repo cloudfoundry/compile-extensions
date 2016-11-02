@@ -1,4 +1,4 @@
-# compile extenions
+# compile extensions
 
 A library which provides extra functions and overrides for Cloud
 Foundry Buildpack compile scripts.
