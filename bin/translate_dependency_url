@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-
-$LOAD_PATH << File.expand_path('../../lib', __FILE__)
-require 'compile_extensions'
-require 'yaml'
-
-uri = ARGV[0]
-puts CompileExtensions::URITranslator.translate(uri)

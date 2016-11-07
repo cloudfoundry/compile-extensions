@@ -25,16 +25,6 @@ Translates the URL given in `ARGV[0]` by matching the URL to a corresponding ent
 ./compile-extensions/bin/download_dependency [URI] [INSTALL_DIR]
 ```
 
-## translate\_dependency\_url
-
-Translates the URL given in `ARGV[0]` by matching the URL to a corresponding entry in `manifest.yml`.
-
-### Usage
-
-```bash
-./compile-extensions/bin/translate_dependency_url [URI]
-```
-
 ## is\_cached
 
 Returns an exit status of `0` if the current buildpack is a cached buildpack.
@@ -53,5 +43,4 @@ Returns the default version in the manifest (if specified) for a given dependenc
 
 ```bash
 ./compile-extensions/bin/default_version_for [MANIFEST_FILE] [DEPENDENCY_NAME]
-[VERSION]
 ```

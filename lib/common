@@ -15,10 +15,6 @@ install_python() {
     fi
 }
 
-translate_dependency_url() {
-    ${BUILDPACK_PATH}/compile-extensions/bin/translate_dependency_url $1
-}
-
 filter_dependency_url() {
     ${BUILDPACK_PATH}/compile-extensions/bin/filter_dependency_url $1
 }
@@ -26,4 +22,16 @@ filter_dependency_url() {
 is_cached() {
     ${BUILDPACK_PATH}/compile-extensions/bin/is_cached
     return $?
+}
+
+recommend_dependency() {
+   ${BUILDPACK_PATH}/compile-extensions/bin/recommend_dependency $1
+}
+
+download_dependency() {
+   ${BUILDPACK_PATH}/compile-extensions/bin/download_dependency $1 $2
+}
+
+default_version_for() {
+   ${BUILDPACK_PATH}/compile-extensions/bin/default_version_for $1 $2
 }
