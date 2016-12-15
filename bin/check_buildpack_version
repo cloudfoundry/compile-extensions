@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+
+class BuildpackVersionChecker
+	def initialize(staging_buildpack_dir, cache_dir)
+		@staging_buildpack_version_file = File.join(staging_buildpack_dir, 'VERSION')
+		@staging_buildpack_manifest_file = File.join(staging_buildpack_dir, 'manifest.yml')
+		@staged_buildpack_metadata_file = File.join(cache_dir, 'BUILDPACK_METADATA')
+	end
+
+	def run
+		return unless File.exist?(@staging_buildpack_manifest_file)
+		return unless File.exist?(@staging_buildpack_version_file)
+		return unless File.exist?(@staged_buildpack_metadata_file)
+
+		staging_buildpack_language =YAML.load_file(@staging_buildpack_manifest_file)['language']
+
+		staged_buildpack_metadata = YAML.load(File.read(@staged_buildpack_metadata_file))
+		staged_buildpack_language = staged_buildpack_metadata['language'].strip
+		staged_buildpack_version = staged_buildpack_metadata['version'].strip
+
+		return if staged_buildpack_language != staging_buildpack_language
+
+		staging_buildpack_version = File.read(@staging_buildpack_version_file).strip
+
+		if staged_buildpack_version != staging_buildpack_version
+			puts "WARNING: buildpack version changed from #{staged_buildpack_version} to #{staging_buildpack_version}"
+		end
+	end
+end
+
+
+BuildpackVersionChecker.new(ARGV[0], ARGV[1]).run
