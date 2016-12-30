@@ -159,4 +159,24 @@ MANIFEST
 
     it_behaves_like 'erroring with helpful defaults misconfiguration message'
   end
+
+  context "one argument is provided" do
+    let(:manifest_contents) { 'does not matter' }
+
+    it 'errors with a helpful message' do
+      _, error_message, status = default_version_for(buildpack_directory, 'manifest.yml', '')
+      expect(status.exitstatus).to eq 1
+      expect(error_message).to include 'Must provide both a buildpack manifest and dependency'
+    end
+  end
+
+  context "no arguments are provided" do
+    let(:manifest_contents) { 'does not matter' }
+
+    it 'errors with a helpful message' do
+      _, error_message, status = default_version_for(buildpack_directory, '', '')
+      expect(status.exitstatus).to eq 1
+      expect(error_message).to include 'Must provide both a buildpack manifest and dependency'
+    end
+  end
 end

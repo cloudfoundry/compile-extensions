@@ -8,10 +8,16 @@ class DefaultVersionIdentifier
   attr_accessor :dependencies
 
   def initialize(manifest_path, requested_dependency_name)
+    raise bad_arguments_error_message if manifest_path.nil? || requested_dependency_name.nil?
+
     @requested_dependency_name = requested_dependency_name
     manifest = YAML.load_file(manifest_path)
     @default_dependency_versions = manifest['default_versions'] || raise(defaults_misconfigured_error_message)
     @dependencies = manifest['dependencies']
+  end
+
+  def bad_arguments_error_message
+    'Must provide both a buildpack manifest and dependency'
   end
 
   def defaults_misconfigured_error_message
