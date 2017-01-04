@@ -32,6 +32,25 @@ module CompileExtensions
       matching_versions.collect(&:to_s).sort.reverse
     end
 
+    def newest_patch_version(dependency)
+      current_version = dependency['version']
+      name = dependency['name']
+
+      versions_in_manifest = valid_versions(dependency)
+
+      if versions_in_manifest.count > 1
+        newest_patch_version = versions_in_manifest.select do |ver|
+          same_major_minor?(current_version, ver, name)
+        end.sort do |ver1, ver2|
+          compare_manifest_versions(ver1, ver2, name)
+        end.last
+      else
+        newest_patch_version = current_version
+      end
+
+      newest_patch_version
+    end
+
 
     def find_translated_url(uri)
       dependency = find_matching_dependency(uri)
@@ -50,6 +69,31 @@ module CompileExtensions
     end
 
     private
+
+    def same_major_minor?(ver1, ver2, name)
+      semver1 = manifest_to_semver(ver1, name)
+      semver2 = manifest_to_semver(ver2, name)
+
+      major1, minor1, _ = semver1.split('.')
+      major2, minor2, _ = semver2.split('.')
+
+      major1 == major2 && minor1 == minor2
+    end
+
+    def compare_manifest_versions(ver1, ver2, name)
+      Gem::Version.new(manifest_to_semver(ver1, name)) <=>
+      Gem::Version.new(manifest_to_semver(ver2, name))
+    end
+
+    def manifest_to_semver(version, name)
+      case name
+      when 'jruby'
+        version.match /.*jruby-(.*)/
+        $1
+      else
+        version
+      end
+    end
 
     def transform_mapping_values(mapping, uri)
       matches = uri.match(mapping['match'])

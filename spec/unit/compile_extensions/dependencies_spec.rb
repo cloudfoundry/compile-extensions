@@ -1,3 +1,4 @@
+require 'yaml'
 require 'spec_helper'
 
 module CompileExtensions
@@ -235,6 +236,101 @@ module CompileExtensions
           expect(versions).to eq ['1.9.3', '1.9']
         end
       end
+    end
+
+    describe '#newest_patch_version' do
+      context 'the dependency versions are well formed' do
+        let(:manifest_contents) do
+        <<-MANIFEST
+dependencies:
+- name: ruby
+  version: 2.3.2
+- name: ruby
+  version: 2.3.3
+- name: ruby
+  version: 2.2.5
+- name: ruby
+  version: 2.2.6
+- name: ruby
+  version: 2.1.9
+- name: ruby
+  version: 2.1.8
+MANIFEST
+        end
+        let(:manifest)   { YAML.load(manifest_contents) }
+        let(:dependency) { 'override' }
+
+        subject { dependencies.newest_patch_version dependency }
+
+        context 'there is a newer patch version' do
+          let(:dependency) { {'name' => 'ruby', 'version' => '2.2.5'}  }
+
+          it 'returns the newer version' do
+            expect(subject).to eq '2.2.6'
+          end
+        end
+
+        context 'there is not a newer patch version' do
+          let(:dependency) { {'name' => 'ruby', 'version' => '2.1.9'}  }
+
+          it 'returns the same version' do
+            expect(subject).to eq '2.1.9'
+          end
+        end
+      end
+
+      context 'some dependency versions are pre-release' do
+        let(:manifest_contents) do
+        <<-MANIFEST
+dependencies:
+- name: dotnet
+  version: 1.0.0-preview2-003156
+- name: dotnet
+  version: 1.0.0-preview2-003131
+- name: dotnet
+  version: 1.0.0-preview4-004233
+- name: dotnet
+  version: 1.0.0
+- name: dotnet
+  version: 1.0.0-preview2-1-003177
+- name: dotnet
+  version: 1.0.0-preview3-004056
+MANIFEST
+        end
+        let(:manifest)   { YAML.load(manifest_contents) }
+        let(:dependency) { {'name' => 'dotnet', 'version' => '1.0.0-preview2-1-003177'}  }
+
+        subject { dependencies.newest_patch_version dependency }
+
+        it 'returns the latest version' do
+          expect(subject).to eq '1.0.0'
+        end
+      end
+
+      context 'the dependency is JRuby' do
+        let(:manifest_contents) do
+        <<-MANIFEST
+dependencies:
+- name: jruby
+  version: ruby-1.9.3-jruby-1.7.26
+- name: jruby
+  version: ruby-2.0.0-jruby-1.7.26
+- name: jruby
+  version: ruby-2.3.1-jruby-9.1.5.0
+- name: jruby
+  version: ruby-2.3.0-jruby-9.1.2.0
+MANIFEST
+        end
+        let(:manifest)   { YAML.load(manifest_contents) }
+        let(:dependency) { {'name' => 'jruby', 'version' => 'ruby-2.3.0-jruby-9.1.2.0'}  }
+
+        subject { dependencies.newest_patch_version dependency }
+
+        it 'uses the jruby version to make the determination' do
+          expect(subject).to eq 'ruby-2.3.1-jruby-9.1.5.0'
+        end
+      end
+
     end
   end
 end
