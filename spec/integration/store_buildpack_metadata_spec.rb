@@ -70,6 +70,19 @@ describe 'store_buildpack_metadata' do
         end
       end
 
+      context 'cache dir does not exist' do
+        let(:cache_dir) { 'not/a/real/directory/' }
+
+        it 'exits without an exception' do
+          stdout, stderr, status = store_buildpack_metadata(buildpack_directory, cache_dir)
+
+          expect(status.exitstatus).to eq 0
+
+          expect(stdout).to eq('')
+          expect(stderr).to eq('')
+        end
+      end
+
       context 'the current buildpack that is staging has a blank VERSION file' do
         before { File.write(File.join(buildpack_directory, 'VERSION'), "") }
 

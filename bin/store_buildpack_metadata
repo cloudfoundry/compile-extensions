@@ -10,21 +10,24 @@ class BuildpackVersionStorer
 	end
 
 	def run
-		return unless File.exist? @manifest_file
-		return unless File.exist? @staging_buildpack_version_file
-		staging_buildpack_version = File.read(@staging_buildpack_version_file).strip
-		return if staging_buildpack_version.strip.empty?
+		begin
+			return unless File.exist? @manifest_file
+			return unless File.exist? @staging_buildpack_version_file
+			staging_buildpack_version = File.read(@staging_buildpack_version_file).strip
+			return if staging_buildpack_version.strip.empty?
 
-		manifest_yaml = YAML.load_file(@manifest_file)
-		staging_buildpack_language = manifest_yaml['language']
-		staged_buildpack_metadata_file = File.join(@cache_dir, 'BUILDPACK_METADATA')
+			manifest_yaml = YAML.load_file(@manifest_file)
+			staging_buildpack_language = manifest_yaml['language']
+			staged_buildpack_metadata_file = File.join(@cache_dir, 'BUILDPACK_METADATA')
 
-		buildpack_metadata_to_write = {
-			'language' => staging_buildpack_language,
-			'version' => staging_buildpack_version
-		}
+			buildpack_metadata_to_write = {
+				'language' => staging_buildpack_language,
+				'version' => staging_buildpack_version
+			}
 
-		File.write(staged_buildpack_metadata_file, buildpack_metadata_to_write.to_yaml)
+			File.write(staged_buildpack_metadata_file, buildpack_metadata_to_write.to_yaml)
+		rescue
+		end
 	end
 end
 

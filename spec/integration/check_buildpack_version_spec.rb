@@ -135,6 +135,34 @@ describe 'check_buildpack_version' do
           end
         end
       end
+
+      context 'a malformed staged buildpack metadata file exists in the cache dir' do
+        let(:buildpack_metadata_file)         { File.join(cache_dir, 'BUILDPACK_METADATA') }
+        let(:staging_buildpack_manifest) {
+            <<-MANIFEST
+            language: ruby
+            MANIFEST
+        }
+        let(:staging_buildpack_metadata) {
+          <<-METADATA
+          ---
+          []
+          METADATA
+        }
+
+        before do
+          File.write(buildpack_metadata_file, staging_buildpack_metadata)
+          File.write(staging_buildpack_manifest_file, staging_buildpack_manifest)
+        end
+
+        it 'exits without an exception' do
+          stdout, stderr, status = check_buildpack_version(buildpack_directory, cache_dir)
+
+          expect(status.exitstatus).to eq 0
+          expect(stdout).to be_empty
+          expect(stderr).to be_empty
+        end
+      end
     end
   end
 end

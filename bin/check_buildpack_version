@@ -10,22 +10,25 @@ class BuildpackVersionChecker
 	end
 
 	def run
-		return unless File.exist?(@staging_buildpack_manifest_file)
-		return unless File.exist?(@staging_buildpack_version_file)
-		return unless File.exist?(@staged_buildpack_metadata_file)
+		begin
+			return unless File.exist?(@staging_buildpack_manifest_file)
+			return unless File.exist?(@staging_buildpack_version_file)
+			return unless File.exist?(@staged_buildpack_metadata_file)
 
-		staging_buildpack_language =YAML.load_file(@staging_buildpack_manifest_file)['language']
+			staging_buildpack_language =YAML.load_file(@staging_buildpack_manifest_file)['language']
 
-		staged_buildpack_metadata = YAML.load(File.read(@staged_buildpack_metadata_file))
-		staged_buildpack_language = staged_buildpack_metadata['language'].strip
-		staged_buildpack_version = staged_buildpack_metadata['version'].strip
+			staged_buildpack_metadata = YAML.load(File.read(@staged_buildpack_metadata_file))
+			staged_buildpack_language = staged_buildpack_metadata['language'].strip
+			staged_buildpack_version = staged_buildpack_metadata['version'].strip
 
-		return if staged_buildpack_language != staging_buildpack_language
+			return if staged_buildpack_language != staging_buildpack_language
 
-		staging_buildpack_version = File.read(@staging_buildpack_version_file).strip
+			staging_buildpack_version = File.read(@staging_buildpack_version_file).strip
 
-		if staged_buildpack_version != staging_buildpack_version
-			puts "WARNING: buildpack version changed from #{staged_buildpack_version} to #{staging_buildpack_version}"
+			if staged_buildpack_version != staging_buildpack_version
+				puts "WARNING: buildpack version changed from #{staged_buildpack_version} to #{staging_buildpack_version}"
+			end
+		rescue
 		end
 	end
 end
