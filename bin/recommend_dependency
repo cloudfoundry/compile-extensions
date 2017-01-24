@@ -32,6 +32,6 @@ Unfortunately, that version of #{dependency['name']} is not supported by this bu
 The versions of #{dependency['name']} supported in this buildpack are:
 #{versions.map{ |i| "- " + i}.join("\n")}
 
-If you need further help, start by reading: http://github.com/cloudfoundry/#{dependency['name']}-buildpack/releases."
+If you need further help, start by reading: https://github.com/cloudfoundry/#{manifest['language']}-buildpack/releases."
   end
 end
