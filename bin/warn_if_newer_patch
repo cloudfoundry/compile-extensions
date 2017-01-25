@@ -5,17 +5,21 @@ $LOAD_PATH << File.expand_path('../../lib', __FILE__)
 require 'compile_extensions'
 require 'yaml'
 
-class DependencyPatchWarner
+class DependencyWarner
   def initialize(original_url, manifest_location)
     @original_url = original_url
     @manifest = YAML.load_file(manifest_location)
   end
 
   def run
-    dependencies      = CompileExtensions::Dependencies.new(@manifest)
-    dependency        = dependencies.find_matching_dependency(@original_url)
+    run_patch
+    run_eol
+  end
 
-    unless dependency.nil?
+  private
+
+  def run_patch
+    if dependency
       found_version = dependency['version']
       dependency_name = dependency['name']
 
@@ -30,6 +34,24 @@ class DependencyPatchWarner
       end
     end
   end
+
+  def run_eol
+    eol_dates = CompileExtensions::EolDeprecations.new(@manifest)
+    deprecation = eol_dates.deprecation(dependency)
+    if deprecation && deprecation.warning?
+      warning_message = "WARNING: #{deprecation.name} #{deprecation.version_line} will no longer be available in new buildpacks released after #{deprecation.date}"
+      puts warning_message
+    end
+  end
+
+  def dependencies
+    @dependencies ||= CompileExtensions::Dependencies.new(@manifest)
+  end
+
+  def dependency
+    @dependency ||= dependencies.find_matching_dependency(@original_url)
+  end
+
 end
 
-DependencyPatchWarner.new(ARGV[0], ARGV[1]).run
+DependencyWarner.new(ARGV[0], ARGV[1]).run
