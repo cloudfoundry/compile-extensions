@@ -10,6 +10,10 @@ describe 'warn_if' do
     stdout, _, _ = run_warn_if_newer_patch(dependency_url)
     stdout.chomp
   end
+  let(:stderr) do
+    _, stderr, _ = run_warn_if_newer_patch(dependency_url)
+    stderr.chomp
+  end
 
   let(:buildpack_directory)  { Dir.mktmpdir }
   let(:manifest_location)    { File.join(buildpack_directory, 'manifest.yml') }
@@ -122,7 +126,7 @@ dependencies:
         let(:dependency_eol) { (Date.today + 31).to_s }
 
         it 'does not write to STDOUT' do
-          expect(stdout).to eq ''
+          expect(stderr).to eq ''
         end
       end
       context 'the date is less than 30 days away' do
@@ -131,7 +135,7 @@ dependencies:
         it 'writes a warning telling the user to upgrade' do
           warning = "WARNING: dependency 1.2 will no longer be available in new buildpacks released after #{dependency_eol}"
 
-          expect(stdout).to include warning
+          expect(stderr).to include warning
         end
       end
 
@@ -141,7 +145,7 @@ dependencies:
         it 'writes a warning telling the user to upgrade' do
           warning = "WARNING: dependency 1.2 will no longer be available in new buildpacks released after #{dependency_eol}"
 
-          expect(stdout).to include warning
+          expect(stderr).to include warning
         end
 
         context 'different version line' do
@@ -149,7 +153,7 @@ dependencies:
           it 'writes a warning telling the user to upgrade' do
             warning = "WARNING: dependency 1.1 will no longer be available in new buildpacks released after 2016-01-18"
 
-            expect(stdout).to include warning
+            expect(stderr).to include warning
           end
         end
       end
