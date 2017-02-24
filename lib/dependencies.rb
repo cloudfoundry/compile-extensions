@@ -40,7 +40,7 @@ module CompileExtensions
 
       if versions_in_manifest.count > 1
         newest_patch_version = versions_in_manifest.select do |ver|
-          same_major_minor?(current_version, ver, name)
+          same_version_line?(current_version, ver, name)
         end.sort do |ver1, ver2|
           compare_manifest_versions(ver1, ver2, name)
         end.last
@@ -70,14 +70,19 @@ module CompileExtensions
 
     private
 
-    def same_major_minor?(ver1, ver2, name)
+    def same_version_line?(ver1, ver2, name)
       semver1 = manifest_to_semver(ver1, name)
       semver2 = manifest_to_semver(ver2, name)
 
       major1, minor1, _ = semver1.split('.')
       major2, minor2, _ = semver2.split('.')
 
-      major1 == major2 && minor1 == minor2
+      case name
+      when 'node'
+        major1 == major2
+      else
+        major1 == major2 && minor1 == minor2
+      end
     end
 
     def compare_manifest_versions(ver1, ver2, name)

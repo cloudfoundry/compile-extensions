@@ -28,6 +28,9 @@ url_to_dependency_map:
   - match: .*dependency\.(.*)\.txt
     version: $1
     name: dependency
+  - match: .*node\.(.*)\.txt
+    version: $1
+    name: node
 
 dependencies:
   - name: dependency
@@ -40,6 +43,18 @@ dependencies:
     version: 1.2.4
     uri: file://dependency.1.2.4.txt
     md5: 987654
+    cf_stacks:
+      - cflinuxfs2
+  - name: node
+    version: 4.5.0
+    uri: file://node.4.5.0.txt
+    md5: 111111
+    cf_stacks:
+      - cflinuxfs2
+  - name: node
+    version: 4.6.0
+    uri: file://node.4.6.0.txt
+    md5: 222222
     cf_stacks:
       - cflinuxfs2
       MANIFEST
@@ -64,7 +79,28 @@ dependencies:
 
           expect(stdout.chomp).to include patch_warning
         end
+      end
 
+      context 'the dependency is node' do
+        context 'the version is the latest node 4.x' do
+          let(:dependency_url) { 'https://example.com/node.4.6.0.txt' }
+
+          it 'does not write to STDOUT' do
+            expect(stdout).to eq ''
+          end
+        end
+
+        context 'the version is not the latest node 4.x' do
+          let(:dependency_url) { 'https://example.com/node.4.5.0.txt' }
+
+          it 'write a warning telling the user to upgrade' do
+            patch_warning = "**WARNING** A newer version of node is available in this buildpack. " +
+              "Please adjust your app to use version 4.6.0 instead of version 4.5.0 as soon as possible. " +
+              "Old versions of node are only provided to assist in migrating to newer versions."
+
+            expect(stdout.chomp).to include patch_warning
+          end
+        end
       end
     end
 
