@@ -190,7 +190,7 @@ module CompileExtensions
         end
 
         context 'a url that should match a versioned ruby dependency' do
-          let(:original_url) { 'https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/cedar/ruby-1.9.3.tgz' }
+          let(:original_url) { 'https://s3-external-1.amazonaws.com/ruby-buildpack/stack-name/ruby-1.9.3.tgz' }
 
           specify do
             expect(matching_dependency['uri']).to eql('http://cf.buildpacks.com/ruby-1.9.3.tgz')
