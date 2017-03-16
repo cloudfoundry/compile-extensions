@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+# this script will return strings containg the new values for env vars
+# $PATH and $LD_LIBRARY_PATH by printing them to STDOUT. 
+# Caller can export the strings to update the environment
+
+$LOAD_PATH << File.expand_path('../../lib', __FILE__)
+
+require 'env_builder'
+
+deps_dir = ARGV[0]
+
+if deps_dir && File.exist?(deps_dir)
+  builder = EnvBuilder.new(deps_dir, deps_dir)
+
+  puts "PATH=#{builder.path}"
+  puts "LD_LIBRARY_PATH=#{builder.ld_library_path}"
+else
+  puts "PATH=$PATH"
+  puts "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+end
