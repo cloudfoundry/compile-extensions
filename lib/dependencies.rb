@@ -37,6 +37,9 @@ module CompileExtensions
       name = dependency['name']
 
       versions = valid_versions(dependency)
+      if versions.size == 1
+        return versions.first
+      end
 
       versions = versions.select do |ver|
         same_version_line?(current_version, ver, name)
