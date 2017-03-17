@@ -36,18 +36,19 @@ module CompileExtensions
       current_version = dependency['version']
       name = dependency['name']
 
-      versions = valid_versions(dependency)
-      if versions.size == 1
-        return versions.first
+      versions_in_manifest = valid_versions(dependency)
+
+      if versions_in_manifest.count > 1
+        newest_patch_version = versions_in_manifest.select do |ver|
+          same_version_line?(current_version, ver, name)
+        end.sort do |ver1, ver2|
+          compare_manifest_versions(ver1, ver2, name)
+        end.last
+      else
+        newest_patch_version = current_version
       end
 
-      versions = versions.select do |ver|
-        same_version_line?(current_version, ver, name)
-      end if current_version
-
-      versions.sort do |ver1, ver2|
-        compare_manifest_versions(ver1, ver2, name)
-      end.last
+      newest_patch_version
     end
 
 
