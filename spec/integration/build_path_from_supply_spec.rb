@@ -25,8 +25,8 @@ describe 'build path from supply' do
       stdout, _, status = run_build_path_from_supply(deps_dir)
       expect(status.exitstatus).to eq 0
 
-      path = "PATH=#{deps_dir}/01/bin:#{deps_dir}/00/bin:$PATH"
-      ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/ld_library_path:#{deps_dir}/01/ld_library_path:$LD_LIBRARY_PATH"
+      path = "PATH=#{deps_dir}/01/bin:#{deps_dir}/00/bin:#{ENV['PATH']}"
+      ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/ld_library_path:#{deps_dir}/01/ld_library_path:#{ENV['LD_LIBRARY_PATH']}"
 
 
       expect(stdout.split("\n")[0]).to eq path
@@ -39,8 +39,8 @@ describe 'build path from supply' do
       stdout, _, status = run_build_path_from_supply('not exist')
       expect(status.exitstatus).to eq 0
 
-      expect(stdout.split("\n")[0]).to eq 'PATH=$PATH'
-      expect(stdout.split("\n")[1]).to eq 'LD_LIBRARY_PATH=$LD_LIBRARY_PATH'
+      expect(stdout.split("\n")[0]).to eq "PATH=#{ENV['PATH']}"
+      expect(stdout.split("\n")[1]).to eq "LD_LIBRARY_PATH=#{ENV['LD_LIBRARY_PATH']}"
     end
   end
 end

@@ -6,11 +6,11 @@ class EnvBuilder
   end
 
  def path
-    join_existing_sub_dirs('bin') + "$PATH"
+    join_existing_sub_dirs('bin')
  end
 
   def ld_library_path
-    join_existing_sub_dirs('ld_library_path') + "$LD_LIBRARY_PATH"
+    join_existing_sub_dirs('ld_library_path')
   end
 
   private
@@ -28,7 +28,7 @@ class EnvBuilder
       end
     end
 
-    val
+    val.chomp(':')
   end
 end
 

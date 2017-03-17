@@ -21,15 +21,15 @@ describe EnvBuilder do
   end
 
   describe '#path' do
-    it 'returns the directories prepended to PATH' do
-      path = "arbitrary_string/01/bin:arbitrary_string/00/bin:$PATH"
+    it 'returns the directories to be prepended to PATH' do
+      path = "arbitrary_string/01/bin:arbitrary_string/00/bin"
       expect(subject.path).to eq path
     end
   end
 
   describe '#ld_library_path' do
-    it 'returns the directories prepended to LD_LIBRARY_PATH' do
-      ld_library_path = "arbitrary_string/02/ld_library_path:arbitrary_string/01/ld_library_path:$LD_LIBRARY_PATH"
+    it 'returns the directories to be prepended to LD_LIBRARY_PATH' do
+      ld_library_path = "arbitrary_string/02/ld_library_path:arbitrary_string/01/ld_library_path"
       expect(subject.ld_library_path).to eq ld_library_path
     end
   end
