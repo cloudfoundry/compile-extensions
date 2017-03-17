@@ -45,7 +45,7 @@ module CompileExtensions
           compare_manifest_versions(ver1, ver2, name)
         end.last
       else
-        newest_patch_version = current_version
+        newest_patch_version = current_version || versions_in_manifest.first
       end
 
       newest_patch_version
