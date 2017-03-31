@@ -13,9 +13,11 @@ deps_dir = ARGV[0]
 if deps_dir && File.exist?(deps_dir)
   builder = EnvBuilder.new(deps_dir, deps_dir)
 
-  puts "PATH=#{builder.path}:#{ENV['PATH']}"
-  puts "LD_LIBRARY_PATH=#{builder.ld_library_path}:#{ENV['LD_LIBRARY_PATH']}"
-else
-  puts "PATH=#{ENV['PATH']}"
-  puts "LD_LIBRARY_PATH=#{ENV['LD_LIBRARY_PATH']}"
+  if builder.path != ""
+    puts "PATH=#{builder.path}:#{ENV['PATH']}"
+  end
+
+  if builder.ld_library_path != ""
+    puts "LD_LIBRARY_PATH=#{builder.ld_library_path}:#{ENV['LD_LIBRARY_PATH']}"
+  end
 end

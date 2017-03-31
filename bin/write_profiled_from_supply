@@ -15,10 +15,15 @@ if deps_dir && File.exist?(deps_dir)
 
   builder = EnvBuilder.new(deps_dir, '$DEPS_DIR')
 
-  script_contents = <<-SCRIPT
-export PATH="#{builder.path}:$PATH"
-export LD_LIBRARY_PATH="#{builder.ld_library_path}:$LD_LIBRARY_PATH"
-SCRIPT
+  script_contents = ""
 
-  File.write(File.join(profiled_dir, '00-multi-supply.sh'), script_contents)
+  if builder.path != ""
+    script_contents += "export PATH=\"#{builder.path}:$PATH\"\n"
+  end
+
+  if builder.ld_library_path != ""
+    script_contents += "export LD_LIBRARY_PATH=\"#{builder.ld_library_path}:$LD_LIBRARY_PATH\"\n"
+  end
+
+  File.write(File.join(profiled_dir, '00-multi-supply.sh'), script_contents) if script_contents != ""
 end
