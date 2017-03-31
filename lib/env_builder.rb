@@ -10,7 +10,7 @@ class EnvBuilder
  end
 
   def ld_library_path
-    join_existing_sub_dirs('ld_library_path')
+    join_existing_sub_dirs('lib')
   end
 
   private

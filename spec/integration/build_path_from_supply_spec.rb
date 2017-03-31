@@ -13,8 +13,8 @@ describe 'build path from supply' do
     before do
       FileUtils.mkdir_p("#{deps_dir}/00/bin")
       FileUtils.mkdir_p("#{deps_dir}/01/bin")
-      FileUtils.mkdir_p("#{deps_dir}/01/ld_library_path")
-      FileUtils.mkdir_p("#{deps_dir}/02/ld_library_path")
+      FileUtils.mkdir_p("#{deps_dir}/01/lib")
+      FileUtils.mkdir_p("#{deps_dir}/02/lib")
     end
 
     after do
@@ -26,7 +26,7 @@ describe 'build path from supply' do
       expect(status.exitstatus).to eq 0
 
       path = "PATH=#{deps_dir}/01/bin:#{deps_dir}/00/bin:#{ENV['PATH']}"
-      ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/ld_library_path:#{deps_dir}/01/ld_library_path:#{ENV['LD_LIBRARY_PATH']}"
+      ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib:#{ENV['LD_LIBRARY_PATH']}"
 
 
       expect(stdout.split("\n")[0]).to eq path

@@ -12,8 +12,8 @@ describe EnvBuilder do
   before do
     FileUtils.mkdir_p("#{deps_dir}/00/bin")
     FileUtils.mkdir_p("#{deps_dir}/01/bin")
-    FileUtils.mkdir_p("#{deps_dir}/01/ld_library_path")
-    FileUtils.mkdir_p("#{deps_dir}/02/ld_library_path")
+    FileUtils.mkdir_p("#{deps_dir}/01/lib")
+    FileUtils.mkdir_p("#{deps_dir}/02/lib")
   end
 
   after do
@@ -29,7 +29,7 @@ describe EnvBuilder do
 
   describe '#ld_library_path' do
     it 'returns the directories to be prepended to LD_LIBRARY_PATH' do
-      ld_library_path = "arbitrary_string/02/ld_library_path:arbitrary_string/01/ld_library_path"
+      ld_library_path = "arbitrary_string/02/lib:arbitrary_string/01/lib"
       expect(subject.ld_library_path).to eq ld_library_path
     end
   end

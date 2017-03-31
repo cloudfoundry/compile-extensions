@@ -16,8 +16,8 @@ describe 'write .profile.d from supply' do
     before do
       FileUtils.mkdir_p("#{deps_dir}/00/bin")
       FileUtils.mkdir_p("#{deps_dir}/01/bin")
-      FileUtils.mkdir_p("#{deps_dir}/01/ld_library_path")
-      FileUtils.mkdir_p("#{deps_dir}/02/ld_library_path")
+      FileUtils.mkdir_p("#{deps_dir}/01/lib")
+      FileUtils.mkdir_p("#{deps_dir}/02/lib")
     end
 
     after do
@@ -29,7 +29,7 @@ describe 'write .profile.d from supply' do
       expect(status.exitstatus).to eq 0
 
       path_export = 'export PATH="$DEPS_DIR/01/bin:$DEPS_DIR/00/bin:$PATH"'
-      ld_library_path_export = 'export LD_LIBRARY_PATH="$DEPS_DIR/02/ld_library_path:$DEPS_DIR/01/ld_library_path:$LD_LIBRARY_PATH"'
+      ld_library_path_export = 'export LD_LIBRARY_PATH="$DEPS_DIR/02/lib:$DEPS_DIR/01/lib:$LD_LIBRARY_PATH"'
 
       content = File.read(profiled_script)
       expect(content).to include path_export
