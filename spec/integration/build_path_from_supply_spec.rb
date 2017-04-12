@@ -30,8 +30,7 @@ describe 'build path from supply' do
         ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib:#{ENV['LD_LIBRARY_PATH']}"
 
 
-        expect(stdout.split("\n")[0]).to eq path
-        expect(stdout.split("\n")[1]).to eq ld_library_path
+        expect(stdout.split("\n")).to eq [path, ld_library_path]
       end
     end
 
@@ -51,8 +50,7 @@ describe 'build path from supply' do
 
         path = "PATH=#{deps_dir}/01/bin:#{deps_dir}/00/bin:#{ENV['PATH']}"
 
-        expect(stdout.split("\n")[0]).to eq path
-        expect(stdout.split("\n")[1]).to eq nil
+        expect(stdout.split("\n")).to eq [path]
       end
 
     end
@@ -73,8 +71,24 @@ describe 'build path from supply' do
 
         ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib:#{ENV['LD_LIBRARY_PATH']}"
 
-        expect(stdout.split("\n")[0]).to eq ld_library_path
-        expect(stdout.split("\n")[1]).to eq nil
+        expect(stdout.split("\n")).to eq [ld_library_path]
+      end
+    end
+
+    context 'env is provided' do
+      before do
+        FileUtils.mkdir_p("#{deps_dir}/01/env")
+        FileUtils.mkdir_p("#{deps_dir}/02/env")
+        File.write("#{deps_dir}/02/env/ENV_ONE", "xxx")
+        FileUtils.mkdir_p("#{deps_dir}/03/env")
+        File.write("#{deps_dir}/03/env/ENV_TWO", "yyy")
+      end
+
+      it 'outputs env to stdout' do
+        stdout, _, status = run_build_path_from_supply(deps_dir)
+
+        expect(status.exitstatus).to eq 0
+        expect(stdout.split("\n")).to eq %w(ENV_ONE=xxx ENV_TWO=yyy)
       end
     end
   end

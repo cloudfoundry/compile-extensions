@@ -6,29 +6,28 @@ class EnvBuilder
   end
 
  def path
-    join_existing_sub_dirs('bin')
+   existing_sub_dirs('bin').join(':')
  end
 
   def ld_library_path
-    join_existing_sub_dirs('lib')
+    existing_sub_dirs('lib').join(':')
+  end
+
+  def env
+    Dir["#{@deps_dir}/*/env/*"].sort.map do |file|
+      data = File.read(file)
+      "#{File.basename(file)}=#{data}"
+    end
   end
 
   private
 
-  def join_existing_sub_dirs(sub_dir_name)
-    val = ""
-
+  def existing_sub_dirs(sub_dir_name)
     Dir.chdir(@deps_dir) do
-      Dir['*'].sort.reverse.each do |dir|
-        sub_dir = File.join(@deps_dir, dir, sub_dir_name)
-
-        if File.exist?(sub_dir)
-          val += "#{@deps_prefix}/#{dir}/#{sub_dir_name}:"
-        end
+      Dir["*/#{sub_dir_name}"].sort.reverse.map do |dir|
+        "#{@deps_prefix}/#{dir}"
       end
     end
-
-    val.chomp(':')
   end
 end
 

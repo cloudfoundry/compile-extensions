@@ -14,6 +14,10 @@ describe EnvBuilder do
     FileUtils.mkdir_p("#{deps_dir}/01/bin")
     FileUtils.mkdir_p("#{deps_dir}/01/lib")
     FileUtils.mkdir_p("#{deps_dir}/02/lib")
+    FileUtils.mkdir_p("#{deps_dir}/02/env")
+    File.write("#{deps_dir}/02/env/ENV_ONE", "xxx")
+    FileUtils.mkdir_p("#{deps_dir}/03/env")
+    File.write("#{deps_dir}/03/env/ENV_TWO", "yyy")
   end
 
   after do
@@ -31,6 +35,12 @@ describe EnvBuilder do
     it 'returns the directories to be prepended to LD_LIBRARY_PATH' do
       ld_library_path = "arbitrary_string/02/lib:arbitrary_string/01/lib"
       expect(subject.ld_library_path).to eq ld_library_path
+    end
+  end
+
+  describe '#env' do
+    it 'returns all of the specified environment vars' do
+      expect(subject.env).to eq ['ENV_ONE=xxx', 'ENV_TWO=yyy']
     end
   end
 end

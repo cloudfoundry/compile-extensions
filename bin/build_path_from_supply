@@ -20,4 +20,6 @@ if deps_dir && File.exist?(deps_dir)
   if builder.ld_library_path != ""
     puts "LD_LIBRARY_PATH=#{builder.ld_library_path}:#{ENV['LD_LIBRARY_PATH']}"
   end
+
+	puts builder.env.join("\n")
 end
