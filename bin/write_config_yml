@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+
+buildpack_dir = ARGV[0]
+dep_dir = ARGV[1]
+
+manifest = YAML.load_file(File.join(buildpack_dir, 'manifest.yml'))
+
+config = {
+	'name' => manifest['language'],
+	'config' => {}
+}
+
+File.write(File.join(dep_dir, 'config.yml'), config.to_yaml)
