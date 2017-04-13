@@ -75,6 +75,50 @@ describe 'build path from supply' do
       end
     end
 
+    context 'include paths are provided' do
+      before do
+        FileUtils.mkdir_p("#{deps_dir}/01/include")
+        FileUtils.mkdir_p("#{deps_dir}/07/include")
+        FileUtils.mkdir_p("#{deps_dir}/04/include")
+      end
+
+      after do
+        FileUtils.rm_rf(deps_dir)
+      end
+
+      it 'INCLUDE_PATH, CPATH and CPPPATH are written to stdout' do
+        stdout, _, status = run_build_path_from_supply(deps_dir)
+        expect(status.exitstatus).to eq 0
+
+        include_path = "INCLUDE_PATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include:#{ENV['INCLUDE_PATH']}"
+        cpath = "CPATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include:#{ENV['CPATH']}"
+        cpppath= "CPPPATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include:#{ENV['CPPPATH']}"
+
+        expect(stdout.split("\n")).to eq [include_path, cpath, cpppath]
+      end
+    end
+
+    context 'pkgconfig paths are provided' do
+      before do
+        FileUtils.mkdir_p("#{deps_dir}/02/pkgconfig")
+        FileUtils.mkdir_p("#{deps_dir}/08/pkgconfig")
+        FileUtils.mkdir_p("#{deps_dir}/05/pkgconfig")
+      end
+
+      after do
+        FileUtils.rm_rf(deps_dir)
+      end
+
+      it 'PKG_CONFIG_PATH is written to stdout' do
+        stdout, _, status = run_build_path_from_supply(deps_dir)
+        expect(status.exitstatus).to eq 0
+
+        pkgconfig_path = "PKG_CONFIG_PATH=#{deps_dir}/08/pkgconfig:#{deps_dir}/05/pkgconfig:#{deps_dir}/02/pkgconfig:#{ENV['PKG_CONFIG_PATH']}"
+
+        expect(stdout.split("\n")).to eq [pkgconfig_path]
+      end
+    end
+
     context 'env is provided' do
       before do
         FileUtils.mkdir_p("#{deps_dir}/01/env")

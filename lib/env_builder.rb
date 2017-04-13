@@ -9,6 +9,14 @@ class EnvBuilder
    existing_sub_dirs('bin').join(':')
  end
 
+ def include_path
+   existing_sub_dirs('include').join(':')
+ end
+
+ def pkgconfig
+   existing_sub_dirs('pkgconfig').join(':')
+ end
+
   def ld_library_path
     existing_sub_dirs('lib').join(':')
   end

@@ -21,5 +21,16 @@ if deps_dir && File.exist?(deps_dir)
     puts "LD_LIBRARY_PATH=#{builder.ld_library_path}:#{ENV['LD_LIBRARY_PATH']}"
   end
 
-	puts builder.env.join("\n")
+  include_path = builder.include_path
+  if include_path != ""
+    puts "INCLUDE_PATH=#{include_path}:#{ENV['INCLUDE_PATH']}"
+    puts "CPATH=#{include_path}:#{ENV['CPATH']}"
+    puts "CPPPATH=#{include_path}:#{ENV['CPPPATH']}"
+  end
+
+  if builder.pkgconfig != ""
+    puts "PKG_CONFIG_PATH=#{builder.pkgconfig}:#{ENV["PKG_CONFIG_PATH"]}"
+  end
+
+  puts builder.env.join("\n")
 end

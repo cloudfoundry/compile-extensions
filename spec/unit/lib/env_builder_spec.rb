@@ -16,8 +16,12 @@ describe EnvBuilder do
     FileUtils.mkdir_p("#{deps_dir}/02/lib")
     FileUtils.mkdir_p("#{deps_dir}/02/env")
     File.write("#{deps_dir}/02/env/ENV_ONE", "xxx")
+    FileUtils.mkdir_p("#{deps_dir}/02/include")
+    FileUtils.mkdir_p("#{deps_dir}/02/pkgconfig")
     FileUtils.mkdir_p("#{deps_dir}/03/env")
     File.write("#{deps_dir}/03/env/ENV_TWO", "yyy")
+    FileUtils.mkdir_p("#{deps_dir}/04/include")
+    FileUtils.mkdir_p("#{deps_dir}/05/pkgconfig")
   end
 
   after do
@@ -35,6 +39,20 @@ describe EnvBuilder do
     it 'returns the directories to be prepended to LD_LIBRARY_PATH' do
       ld_library_path = "arbitrary_string/02/lib:arbitrary_string/01/lib"
       expect(subject.ld_library_path).to eq ld_library_path
+    end
+  end
+
+  describe '#include_path' do
+    it 'returns the directories to be prepended to INCLUDE_PATH, CPATH, and CPPPATH' do
+      include_path = "arbitrary_string/04/include:arbitrary_string/02/include"
+      expect(subject.include_path).to eq include_path
+    end
+  end
+
+  describe '#pkgconfig' do
+    it 'returns the directories to be prepended to PKG_CONFIG_PATH' do
+      pkgconfig = "arbitrary_string/05/pkgconfig:arbitrary_string/02/pkgconfig"
+      expect(subject.pkgconfig).to eq pkgconfig
     end
   end
 
