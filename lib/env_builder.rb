@@ -1,3 +1,5 @@
+require 'fileutils'
+
 class EnvBuilder
 
   def initialize(deps_dir, deps_prefix)
@@ -25,6 +27,19 @@ class EnvBuilder
     Dir["#{@deps_dir}/*/env/*"].sort.map do |file|
       data = File.read(file)
       "#{File.basename(file)}=#{data}"
+    end
+  end
+
+  def copy_profile_d_scripts(build_dir)
+    output_dir = File.join(build_dir, ".profile.d")
+    FileUtils.mkdir_p(output_dir)
+
+    Dir.chdir(@deps_dir) do
+      Dir['*/profile.d/*'].each do |script_location|
+        idx, _, name = script_location.split("/")
+        output_file = File.join(output_dir, "#{idx}-#{name}")
+        FileUtils.cp(script_location, output_file)
+      end
     end
   end
 

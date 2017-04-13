@@ -3,6 +3,7 @@ require 'tmpdir'
 require 'fileutils'
 
 describe EnvBuilder do
+  let(:build_dir)   { Dir.mktmpdir }
   let(:deps_dir)    { Dir.mktmpdir }
   let(:deps_prefix) { 'arbitrary_string' }
 
@@ -22,10 +23,18 @@ describe EnvBuilder do
     File.write("#{deps_dir}/03/env/ENV_TWO", "yyy")
     FileUtils.mkdir_p("#{deps_dir}/04/include")
     FileUtils.mkdir_p("#{deps_dir}/05/pkgconfig")
+
+    FileUtils.mkdir_p("#{deps_dir}/02/profile.d")
+    File.write("#{deps_dir}/02/profile.d/thing-one.sh", "xxx")
+    FileUtils.mkdir_p("#{deps_dir}/09/profile.d")
+    File.write("#{deps_dir}/09/profile.d/thing-one.sh", "yyy")
+    FileUtils.mkdir_p("#{deps_dir}/06/profile.d")
+    File.write("#{deps_dir}/06/profile.d/thing-two.sh", "zzz")
   end
 
   after do
     FileUtils.rm_rf(deps_dir)
+    FileUtils.rm_rf(build_dir)
   end
 
   describe '#path' do
@@ -59,6 +68,15 @@ describe EnvBuilder do
   describe '#env' do
     it 'returns all of the specified environment vars' do
       expect(subject.env).to eq ['ENV_ONE=xxx', 'ENV_TWO=yyy']
+    end
+  end
+
+  describe '#copy_profile_d_scripts' do
+    it 'copies the scripts to <buildDir>/.profile.d, prefixing with IDX' do
+      subject.copy_profile_d_scripts(build_dir)
+      expect(File.read("#{build_dir}/.profile.d/02-thing-one.sh")).to eq "xxx"
+      expect(File.read("#{build_dir}/.profile.d/06-thing-two.sh")).to eq "zzz"
+      expect(File.read("#{build_dir}/.profile.d/09-thing-one.sh")).to eq "yyy"
     end
   end
 end
