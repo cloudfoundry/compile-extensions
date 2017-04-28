@@ -8,29 +8,39 @@ $LOAD_PATH << File.expand_path('../../lib', __FILE__)
 
 require 'env_builder'
 
+def create_env_string(env_name, env_value)
+  if ENV[env_name] == ""
+    puts "#{env_name}=#{env_value}"
+  else
+    puts "#{env_name}=#{env_value}:#{ENV[env_name]}"
+  end
+end
+
 deps_dir = ARGV[0]
 
 if deps_dir && File.exist?(deps_dir)
   builder = EnvBuilder.new(deps_dir, deps_dir)
 
   if builder.path != ""
-    puts "PATH=#{builder.path}:#{ENV['PATH']}"
+    create_env_string("PATH", builder.path)
   end
 
   if builder.ld_library_path != ""
-    puts "LD_LIBRARY_PATH=#{builder.ld_library_path}:#{ENV['LD_LIBRARY_PATH']}"
+    create_env_string("LD_LIBRARY_PATH", builder.ld_library_path)
   end
 
   include_path = builder.include_path
   if include_path != ""
-    puts "INCLUDE_PATH=#{include_path}:#{ENV['INCLUDE_PATH']}"
-    puts "CPATH=#{include_path}:#{ENV['CPATH']}"
-    puts "CPPPATH=#{include_path}:#{ENV['CPPPATH']}"
+    create_env_string("INCLUDE_PATH", include_path)
+    create_env_string("CPATH", include_path)
+    create_env_string("CPPPATH", include_path)
   end
 
   if builder.pkgconfig != ""
-    puts "PKG_CONFIG_PATH=#{builder.pkgconfig}:#{ENV["PKG_CONFIG_PATH"]}"
+    create_env_string("PKG_CONFIG_PATH", builder.pkgconfig)
   end
 
   puts builder.env.join("\n")
 end
+
+exit 0
