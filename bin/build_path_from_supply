@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # this script will return strings containg the new values for env vars
-# $PATH and $LD_LIBRARY_PATH by printing them to STDOUT. 
+# $PATH and $LD_LIBRARY_PATH by printing them to STDOUT.
 # Caller can export the strings to update the environment
 
 $LOAD_PATH << File.expand_path('../../lib', __FILE__)
@@ -9,10 +9,10 @@ $LOAD_PATH << File.expand_path('../../lib', __FILE__)
 require 'env_builder'
 
 def create_env_string(env_name, env_value)
-  if ENV[env_name] == ""
-    puts "#{env_name}=#{env_value}"
-  else
+  if ENV.has_value?(env_name)
     puts "#{env_name}=#{env_value}:#{ENV[env_name]}"
+  else
+    puts "#{env_name}=#{env_value}"
   end
 end
 

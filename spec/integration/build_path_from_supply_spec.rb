@@ -26,9 +26,17 @@ describe 'build path from supply' do
         stdout, _, status = run_build_path_from_supply(deps_dir)
         expect(status.exitstatus).to eq 0
 
-        path = "PATH=#{deps_dir}/01/bin:#{deps_dir}/00/bin:#{ENV['PATH']}"
-        ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib:#{ENV['LD_LIBRARY_PATH']}"
+        if ENV.has_value?('PATH')
+          path = "PATH=#{deps_dir}/01/bin:#{deps_dir}/00/bin:#{ENV['PATH']}"
+        else
+          path = "PATH=#{deps_dir}/01/bin:#{deps_dir}/00/bin"
+        end
 
+        if ENV.has_value?('LD_LIBRARY_PATH')
+          ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib:#{ENV['LD_LIBRARY_PATH']}"
+        else
+          ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib"
+        end
 
         expect(stdout.split("\n")).to eq [path, ld_library_path]
       end
@@ -48,7 +56,11 @@ describe 'build path from supply' do
         stdout, _, status = run_build_path_from_supply(deps_dir)
         expect(status.exitstatus).to eq 0
 
-        path = "PATH=#{deps_dir}/01/bin:#{deps_dir}/00/bin:#{ENV['PATH']}"
+        if ENV.has_value?('PATH')
+          path = "PATH=#{deps_dir}/01/bin:#{deps_dir}/00/bin:#{ENV['PATH']}"
+        else
+          path = "PATH=#{deps_dir}/01/bin:#{deps_dir}/00/bin"
+        end
 
         expect(stdout.split("\n")).to eq [path]
       end
@@ -69,7 +81,11 @@ describe 'build path from supply' do
         stdout, _, status = run_build_path_from_supply(deps_dir)
         expect(status.exitstatus).to eq 0
 
-        ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib:#{ENV['LD_LIBRARY_PATH']}"
+        if ENV.has_value?('LD_LIBRARY_PATH')
+          ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib:#{ENV['LD_LIBRARY_PATH']}"
+        else
+          ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib"
+        end
 
         expect(stdout.split("\n")).to eq [ld_library_path]
       end
@@ -90,9 +106,23 @@ describe 'build path from supply' do
         stdout, _, status = run_build_path_from_supply(deps_dir)
         expect(status.exitstatus).to eq 0
 
-        include_path = "INCLUDE_PATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include:#{ENV['INCLUDE_PATH']}"
-        cpath = "CPATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include:#{ENV['CPATH']}"
-        cpppath= "CPPPATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include:#{ENV['CPPPATH']}"
+        if ENV.has_value?('INCLUDE_PATH')
+          include_path = "INCLUDE_PATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include:#{ENV['INCLUDE_PATH']}"
+        else
+          include_path = "INCLUDE_PATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include"
+        end
+
+        if ENV.has_value?('CPATH')
+          cpath = "CPATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include:#{ENV['CPATH']}"
+        else
+          cpath = "CPATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include"
+        end
+
+        if ENV.has_value?('CPPPATH')
+          cpppath= "CPPPATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include:#{ENV['CPPPATH']}"
+        else
+          cpppath= "CPPPATH=#{deps_dir}/07/include:#{deps_dir}/04/include:#{deps_dir}/01/include"
+        end
 
         expect(stdout.split("\n")).to eq [include_path, cpath, cpppath]
       end
@@ -113,7 +143,11 @@ describe 'build path from supply' do
         stdout, _, status = run_build_path_from_supply(deps_dir)
         expect(status.exitstatus).to eq 0
 
-        pkgconfig_path = "PKG_CONFIG_PATH=#{deps_dir}/08/pkgconfig:#{deps_dir}/05/pkgconfig:#{deps_dir}/02/pkgconfig:#{ENV['PKG_CONFIG_PATH']}"
+        if ENV.has_value?('PKG_CONFIG_PATH')
+          pkgconfig_path = "PKG_CONFIG_PATH=#{deps_dir}/08/pkgconfig:#{deps_dir}/05/pkgconfig:#{deps_dir}/02/pkgconfig:#{ENV['PKG_CONFIG_PATH']}"
+        else
+          pkgconfig_path = "PKG_CONFIG_PATH=#{deps_dir}/08/pkgconfig:#{deps_dir}/05/pkgconfig:#{deps_dir}/02/pkgconfig"
+        end
 
         expect(stdout.split("\n")).to eq [pkgconfig_path]
       end
