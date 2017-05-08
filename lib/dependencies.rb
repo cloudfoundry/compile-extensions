@@ -21,6 +21,14 @@ module CompileExtensions
      transform_mapping_values(mapping, uri)
     end
 
+    def find_dependency_by_name(name, version)
+      @manifest['dependencies'].find do |dependency|
+        dependency['version'].to_s == version.to_s &&
+          dependency['name'] == name &&
+          dependency_satisfies_current_stack(dependency)
+      end
+    end
+
     def valid_versions(dependency)
       name = dependency['name']
       matching_versions = []

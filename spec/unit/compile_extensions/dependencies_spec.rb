@@ -238,6 +238,68 @@ module CompileExtensions
       end
     end
 
+    describe '#find_dependency_by_name' do
+      let(:manifest_contents) do
+        <<-MANIFEST
+          dependencies:
+          - name: node
+            version: 4.8.2
+            uri: https://buildpacks.cloudfoundry.org/dependencies/node/node-4.8.2-linux-x64-09d53abc.tgz
+            md5: 09d53abca4f08cf63b9eb88b7175266f
+            cf_stacks:
+            - cflinuxfs2
+          - name: node
+            version: 4.8.3
+            uri: https://buildpacks.cloudfoundry.org/dependencies/node/node-4.8.3-linux-x64-0622641b.tgz
+            md5: 0622641b64386fdfcaa82da4987a1105
+            cf_stacks:
+            - cflinuxfs2
+        MANIFEST
+      end
+      let(:manifest)   { YAML.load(manifest_contents) }
+      let(:stack) { 'cflinuxfs2' }
+      before do
+        ENV['CF_STACK'] = stack
+      end
+
+      subject { dependencies.find_dependency_by_name dependency_name, dependency_version }
+
+      context 'correct name and stack' do
+        let(:dependency_name) { 'node' }
+
+        context 'version 4.8.2' do
+          let(:dependency_version) { '4.8.2' }
+          it 'returns the requested version' do
+            expect(subject['uri']).to eq 'https://buildpacks.cloudfoundry.org/dependencies/node/node-4.8.2-linux-x64-09d53abc.tgz'
+          end
+        end
+
+        context 'version 4.8.3' do
+          let(:dependency_version) { '4.8.3' }
+          it 'returns the requested version' do
+            expect(subject['uri']).to eq 'https://buildpacks.cloudfoundry.org/dependencies/node/node-4.8.3-linux-x64-0622641b.tgz'
+          end
+        end
+      end
+
+      context 'incorrect name' do
+        let(:dependency_name) { 'ruby' }
+        let(:dependency_version) { '4.8.2' }
+        it 'returns nil' do
+          expect(subject).to be_nil
+        end
+      end
+
+      context 'incorrect stack' do
+        let(:stack) { 'other' }
+        let(:dependency_name) { 'node' }
+        let(:dependency_version) { '4.8.2' }
+        it 'returns nil' do
+          expect(subject).to be_nil
+        end
+      end
+    end
+
     describe '#newest_patch_version' do
       context 'the dependency versions are well formed' do
         let(:manifest_contents) do

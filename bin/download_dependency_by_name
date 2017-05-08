@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << File.expand_path('../../lib', __FILE__)
+require 'yaml'
+require 'compile_extensions'
+require 'digest'
+require 'fileutils'
+
+dep_name          = ARGV[0]
+dep_version       = ARGV[1]
+file_location     = ARGV[2]
+manifest_location = File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "manifest.yml"))
+manifest          = YAML.load_file(manifest_location)
+dependencies      = CompileExtensions::Dependencies.new(manifest)
+dependency        = dependencies.find_dependency_by_name(dep_name, dep_version)
+filtered_uri      = CompileExtensions::URITranslator.filter_uri(dependency['uri'])
+
+`curl -s -L #{dependency['uri']} -o #{file_location}`
+generated_md5 = Digest::MD5.file(file_location).hexdigest
+
+puts filtered_uri
+
+if dependency['md5'] == generated_md5
+  exit 0
+else
+  puts "DEPENDENCY_MD5_MISMATCH for #{filtered_uri}: generated md5: #{generated_md5}, expected md5: #{dependency['md5']}"
+  FileUtils.rm(file_location)
+  exit 3
+end
