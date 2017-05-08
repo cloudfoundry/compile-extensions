@@ -8,7 +8,7 @@ describe 'write .profile.d from supply' do
   end
 
   let(:build_dir) { Dir.mktmpdir }
-  let(:profiled_script) {File.join(build_dir, ".profile.d", "000-multi-supply.sh")}
+  let(:profiled_script) {File.join(build_dir, ".profile.d", "000_multi-supply.sh")}
 
   context 'deps dir exists' do
     let(:deps_dir)  { Dir.mktmpdir }
@@ -25,7 +25,7 @@ describe 'write .profile.d from supply' do
         FileUtils.rm_rf(deps_dir)
       end
 
-      it 'writes appropriate export commands to .profile.d/000-multi-supply.sh script' do
+      it 'writes appropriate export commands to .profile.d/000_multi-supply.sh script' do
         _, _, status = run_write_profiled_from_supply(deps_dir, build_dir)
         expect(status.exitstatus).to eq 0
 
@@ -48,7 +48,7 @@ describe 'write .profile.d from supply' do
         FileUtils.rm_rf(deps_dir)
       end
 
-      it 'writes appropriate export commands to .profile.d/000-multi-supply.sh script' do
+      it 'writes appropriate export commands to .profile.d/000_multi-supply.sh script' do
         _, _, status = run_write_profiled_from_supply(deps_dir, build_dir)
         expect(status.exitstatus).to eq 0
 
@@ -71,7 +71,7 @@ describe 'write .profile.d from supply' do
         FileUtils.rm_rf(deps_dir)
       end
 
-      it 'writes appropriate export commands to .profile.d/000-multi-supply.sh script' do
+      it 'writes appropriate export commands to .profile.d/000_multi-supply.sh script' do
         _, _, status = run_write_profiled_from_supply(deps_dir, build_dir)
         expect(status.exitstatus).to eq 0
 

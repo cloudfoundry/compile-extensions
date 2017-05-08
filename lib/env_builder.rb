@@ -37,7 +37,7 @@ class EnvBuilder
     Dir.chdir(@deps_dir) do
       Dir['*/profile.d/*'].each do |script_location|
         idx, _, name = script_location.split("/")
-        output_file = File.join(output_dir, "#{idx}-#{name}")
+        output_file = File.join(output_dir, "#{idx}_#{name}")
         FileUtils.cp(script_location, output_file)
       end
     end

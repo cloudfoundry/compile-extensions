@@ -74,9 +74,9 @@ describe EnvBuilder do
   describe '#copy_profile_d_scripts' do
     it 'copies the scripts to <buildDir>/.profile.d, prefixing with IDX' do
       subject.copy_profile_d_scripts(build_dir)
-      expect(File.read("#{build_dir}/.profile.d/02-thing-one.sh")).to eq "xxx"
-      expect(File.read("#{build_dir}/.profile.d/06-thing-two.sh")).to eq "zzz"
-      expect(File.read("#{build_dir}/.profile.d/09-thing-one.sh")).to eq "yyy"
+      expect(File.read("#{build_dir}/.profile.d/02_thing-one.sh")).to eq "xxx"
+      expect(File.read("#{build_dir}/.profile.d/06_thing-two.sh")).to eq "zzz"
+      expect(File.read("#{build_dir}/.profile.d/09_thing-one.sh")).to eq "yyy"
     end
   end
 end
