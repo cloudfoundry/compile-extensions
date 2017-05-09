@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << File.expand_path('../../lib', __FILE__)
+
+require 'compile_extensions'
+require 'yaml'
+
+class DependencyWarner
+  def initialize(name, version, manifest_location)
+    @name = name
+    @version = version
+    @manifest = YAML.load_file(manifest_location)
+  end
+
+  def run
+    run_patch
+    run_eol
+  end
+
+  private
+
+  def run_patch
+    if dependency
+      found_version = dependency['version']
+      dependency_name = dependency['name']
+
+      newest_patch = dependencies.newest_patch_version dependency
+
+      if found_version != newest_patch
+        warning_message = "**WARNING** A newer version of #{dependency_name} is available in this buildpack. " +
+                          "Please adjust your app to use version #{newest_patch} instead of version #{found_version} as soon as possible. " +
+                          "Old versions of #{dependency_name} are only provided to assist in migrating to newer versions."
+
+        puts warning_message
+      end
+    end
+  end
+
+  def run_eol
+    eol_dates = CompileExtensions::EolDeprecations.new(@manifest)
+    deprecation = eol_dates.deprecation(dependency)
+    if deprecation && deprecation.warning?
+      warning_message = "WARNING: #{deprecation.name} #{deprecation.version_line} will no longer be available in new buildpacks released after #{deprecation.date}"
+      STDERR.puts "\033[31;1m#{warning_message}\033[0m"
+    end
+  end
+
+  def dependencies
+    @dependencies ||= CompileExtensions::Dependencies.new(@manifest)
+  end
+
+  def dependency
+    @dependency ||= dependencies.find_dependency_by_name(@name, @version)
+  end
+
+end
+
+##TODO find it from this file
+
+manifest_yml = File.expand_path('../../../manifest.yml', __FILE__)
+DependencyWarner.new(ARGV[0], ARGV[1], manifest_yml).run

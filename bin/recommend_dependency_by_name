@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << File.expand_path('../../lib', __FILE__)
+require 'compile_extensions'
+require 'yaml'
+
+name = ARGV[0]
+version = ARGV[1]
+cache_path = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'dependencies'))
+
+manifest = YAML.load_file(File.join(File.dirname(__FILE__), '..', '..', 'manifest.yml'))
+dependencies = CompileExtensions::Dependencies.new(manifest)
+
+dependency = dependencies.find_dependency_by_name(name, version)
+
+if dependency.nil?
+  versions = dependencies.valid_versions({ 'name' => name })
+  if versions.length == 0
+    puts "DEPENDENCY MISSING IN MANIFEST:
+
+Unfortunately, we are either unable to resolve the dependency into
+a binary and version number or the requested version or version range is not supported.
+Please replace the URL with a valid link or the requested version/range
+with a supported version or version range."
+  else
+    puts "DEPENDENCY MISSING IN MANIFEST: #{name} #{version}
+
+It looks like you're trying to use #{name} #{version}.
+
+Unfortunately, that version of #{name} is not supported by this buildpack.
+
+The versions of #{name} supported in this buildpack are:
+#{versions.map{ |i| "- " + i}.join("\n")}
+
+If you need further help, start by reading: https://github.com/cloudfoundry/#{manifest['language']}-buildpack/releases."
+  end
+end

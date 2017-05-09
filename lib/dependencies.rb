@@ -29,8 +29,8 @@ module CompileExtensions
       end
     end
 
-    def valid_versions(dependency)
-      name = dependency['name']
+    def valid_versions(hash)
+      name = hash['name']
       matching_versions = []
       @manifest['dependencies'].each do |dependency|
         if dependency['name'] == name
