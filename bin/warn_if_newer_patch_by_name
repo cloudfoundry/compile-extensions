@@ -55,7 +55,5 @@ class DependencyWarner
 
 end
 
-##TODO find it from this file
-
 manifest_yml = File.expand_path('../../../manifest.yml', __FILE__)
 DependencyWarner.new(ARGV[0], ARGV[1], manifest_yml).run

@@ -13,9 +13,16 @@ manifest_location = File.expand_path(File.join(File.dirname(__FILE__), "..", "..
 manifest          = YAML.load_file(manifest_location)
 dependencies      = CompileExtensions::Dependencies.new(manifest)
 dependency        = dependencies.find_dependency_by_name(dep_name, dep_version)
-filtered_uri      = CompileExtensions::URITranslator.filter_uri(dependency['uri'])
 
-`curl -s -L #{dependency['uri']} -o #{file_location}`
+if dependency.nil?
+	puts "DEPENDENCY_MISSING_IN_MANIFEST: #{dep_name} #{dep_version}"
+	exit 1
+end
+
+dependency_uri    = CompileExtensions::URITranslator.cached_uri(dependency['uri'])
+filtered_uri      = CompileExtensions::URITranslator.filter_uri(dependency_uri)
+
+`curl -s -L #{dependency_uri} -o #{file_location}`
 generated_md5 = Digest::MD5.file(file_location).hexdigest
 
 puts filtered_uri

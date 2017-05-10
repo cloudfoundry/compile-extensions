@@ -3,9 +3,8 @@ require 'uri'
 
 module CompileExtensions
   module URITranslator
-    def self.translate(uri)
-      cache_path = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'dependencies'))
 
+    def self.translate(uri)
       manifest = YAML.load_file(File.join(File.dirname(__FILE__), '..', '..', 'manifest.yml'))
       dependencies = CompileExtensions::Dependencies.new(manifest)
 
@@ -16,13 +15,16 @@ module CompileExtensions
         exit 1
       end
 
-      if File.exist? cache_path
-        filtered_uri = filter_uri(translated_uri)
-        file_path = File.join(cache_path, filtered_uri.gsub(/[\/:\?&]/, '_'))
-        translated_uri = "file://#{file_path}"
-      end
+      cached_uri(translated_uri)
+    end
 
-      translated_uri
+    def self.cached_uri(uri)
+      cache_path = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'dependencies'))
+      return uri unless File.exist? cache_path
+
+      filtered_uri = filter_uri(uri)
+      file_path = File.join(cache_path, filtered_uri.gsub(/[\/:\?&]/, '_'))
+      "file://#{file_path}"
     end
 
     def self.filter_uri(unsafe_uri)
