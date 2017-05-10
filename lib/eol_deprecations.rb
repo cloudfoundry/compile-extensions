@@ -12,12 +12,13 @@ module CompileExtensions
     end
 
     class Deprecation
-      attr_reader :name, :version_line, :date
+      attr_reader :name, :version_line, :date, :link
       def initialize(hash)
         @name = hash['name']
         @match = Regexp.new(hash['match'])
         @version_line = hash['version_line']
         @date = hash['date']
+        @link = hash['link']
       end
 
       def match?(dependency)

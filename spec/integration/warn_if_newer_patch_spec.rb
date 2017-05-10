@@ -115,6 +115,7 @@ dependencies:
 
   describe 'dependencies are near EOL' do
     let(:dependency_eol) { '2016-02-30' }
+    let(:eol_link) { 'https://github.com/nodejs/LTS-11' }
 
     let(:manifest_contents) do
       <<-MANIFEST
@@ -124,10 +125,12 @@ dependency_deprecation_dates:
     version_line: 1.1
     name: dependency
     date: 2016-01-18
+    link: https://github.com/nodejs/LTS-11
   - match: 1.2.\\d
     version_line: 1.2
     name: dependency
     date: #{dependency_eol}
+    link: #{eol_link}
 
 url_to_dependency_map:
   - match: .*dependency\.(.*)\.txt
@@ -165,12 +168,13 @@ dependencies:
           expect(stderr).to eq ''
         end
       end
+
       context 'the date is less than 30 days away' do
         let(:dependency_eol) { (Date.today + 29).to_s }
 
         it 'writes a warning telling the user to upgrade' do
-          warning = "WARNING: dependency 1.2 will no longer be available in new buildpacks released after #{dependency_eol}"
-
+          warning = "WARNING: dependency 1.2 will no longer be available in new buildpacks released after #{dependency_eol}." +
+                    " See: #{eol_link}"
           expect(stderr).to include warning
         end
       end
@@ -179,27 +183,41 @@ dependencies:
         let(:dependency_eol) { (Date.today - 10).to_s }
 
         it 'writes a warning telling the user to upgrade' do
-          warning = "WARNING: dependency 1.2 will no longer be available in new buildpacks released after #{dependency_eol}"
+          warning = "WARNING: dependency 1.2 will no longer be available in new buildpacks released after #{dependency_eol}." +
+                    " See: #{eol_link}"
 
           expect(stderr).to include warning
         end
+      end
 
-        context 'different version line' do
-          let(:dependency_url) { 'https://example.com/dependency.1.1.1.txt' }
-          it 'writes a warning telling the user to upgrade' do
-            warning = "WARNING: dependency 1.1 will no longer be available in new buildpacks released after 2016-01-18"
+      context 'the dependency deprecation information does not include a link' do
+        let(:eol_link) { '' }
+        let(:dependency_eol) { (Date.today - 10).to_s }
 
-            expect(stderr).to include warning
-          end
+        it 'writes a warning telling the user to upgrade' do
+          warning = "WARNING: dependency 1.2 will no longer be available in new buildpacks released after #{dependency_eol}."
+
+          expect(stderr).to include warning
+          expect(stderr).to_not include "See: "
         end
       end
-    end
 
-    context 'the dependency does not have a deprecation date' do
-      let(:dependency_url) { 'https://example.com/dependency.1.3.1.txt' }
+      context 'the dependency does not have a deprecation date' do
+        let(:dependency_url) { 'https://example.com/dependency.1.3.1.txt' }
 
-      it 'does not write to STDOUT' do
-        expect(stdout).to eq ''
+        it 'does not write to STDOUT' do
+          expect(stdout).to eq ''
+        end
+      end
+
+      context 'different version line' do
+        let(:dependency_url) { 'https://example.com/dependency.1.1.1.txt' }
+        it 'writes a warning telling the user to upgrade' do
+          warning = "WARNING: dependency 1.1 will no longer be available in new buildpacks released after 2016-01-18." +
+            " See: #{eol_link}"
+
+          expect(stderr).to include warning
+        end
       end
     end
   end

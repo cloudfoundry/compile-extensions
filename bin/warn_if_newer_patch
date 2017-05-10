@@ -39,7 +39,8 @@ class DependencyWarner
     eol_dates = CompileExtensions::EolDeprecations.new(@manifest)
     deprecation = eol_dates.deprecation(dependency)
     if deprecation && deprecation.warning?
-      warning_message = "WARNING: #{deprecation.name} #{deprecation.version_line} will no longer be available in new buildpacks released after #{deprecation.date}"
+      warning_message = "WARNING: #{deprecation.name} #{deprecation.version_line} will no longer be available in new buildpacks released after #{deprecation.date}."
+      warning_message += " See: #{deprecation.link}" unless deprecation.link.nil?
       STDERR.puts "\033[31;1m#{warning_message}\033[0m"
     end
   end
