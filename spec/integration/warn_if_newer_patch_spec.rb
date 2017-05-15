@@ -174,7 +174,7 @@ dependencies:
 
         it 'writes a warning telling the user to upgrade' do
           warning = "WARNING: dependency 1.2 will no longer be available in new buildpacks released after #{dependency_eol}." +
-                    " See: #{eol_link}"
+                    "\nSee: #{eol_link}"
           expect(stderr).to include warning
         end
       end
@@ -184,7 +184,7 @@ dependencies:
 
         it 'writes a warning telling the user to upgrade' do
           warning = "WARNING: dependency 1.2 will no longer be available in new buildpacks released after #{dependency_eol}." +
-                    " See: #{eol_link}"
+                    "\nSee: #{eol_link}"
 
           expect(stderr).to include warning
         end
@@ -214,7 +214,7 @@ dependencies:
         let(:dependency_url) { 'https://example.com/dependency.1.1.1.txt' }
         it 'writes a warning telling the user to upgrade' do
           warning = "WARNING: dependency 1.1 will no longer be available in new buildpacks released after 2016-01-18." +
-            " See: #{eol_link}"
+            "\nSee: #{eol_link}"
 
           expect(stderr).to include warning
         end
