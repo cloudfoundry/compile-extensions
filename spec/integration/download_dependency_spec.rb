@@ -184,4 +184,27 @@ dependencies:
       expect(File.read("#{install_directory}/something.txt")).to eq 'blah blee'
     end
   end
+
+  context 'download URI does not exist' do
+    let(:manifest_url) { 'http://my.package.com/package.txt' }
+    let(:md5)          { Digest::MD5.hexdigest 'blah blee' }
+
+    before do
+      proxy.start
+      proxy.stub('http://my.package.com/package.txt').
+        and_return(code: 404)
+      ENV['http_proxy'] = proxy.url
+    end
+
+    after do
+      proxy.reset
+      ENV['http_proxy'] = nil
+    end
+
+    it 'alerts user' do
+      stdout, _ , _ = run_download_dependency(file_path)
+      expect(File).to_not exist("#{install_directory}/something.txt")
+      expect(stdout.chomp).to include("ERROR: Failed to download dependency http://my.package.com/package.txt")
+    end
+  end
 end

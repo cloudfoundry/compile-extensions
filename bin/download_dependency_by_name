@@ -5,6 +5,7 @@ require 'yaml'
 require 'compile_extensions'
 require 'digest'
 require 'fileutils'
+require 'open3'
 
 dep_name          = ARGV[0]
 dep_version       = ARGV[1]
@@ -22,7 +23,12 @@ end
 dependency_uri    = CompileExtensions::URITranslator.cached_uri(dependency['uri'])
 filtered_uri      = CompileExtensions::URITranslator.filter_uri(dependency_uri)
 
-`curl -s -L #{dependency_uri} -o #{file_location}`
+_, status = Open3.capture2e('curl', '-s', '-L', '-f', dependency_uri, '-o', file_location)
+if !status.success?
+	puts "ERROR: Failed to download dependency #{filtered_uri}"
+	exit 3
+end
+
 generated_md5 = Digest::MD5.file(file_location).hexdigest
 
 puts filtered_uri
