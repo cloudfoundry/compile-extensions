@@ -67,6 +67,30 @@ dependencies:
     end
   end
 
+  context 'manifest with no default version and single requested dependency' do
+    let(:manifest_contents) { <<-MANIFEST
+---
+default_versions:
+  - name: SomethingElse
+    version: 0.0.1
+
+dependencies:
+  - name: SomethingElse
+    version: 1.0.1
+  - name: Testlang
+    version: 5.0.1
+  - name: SomethingElse
+    version: 11.0.1
+      MANIFEST
+    }
+
+    it 'returns the default version set in the manifest for the dependency' do
+      default_version, _, status = default_version_for(buildpack_directory, manifest_path, dependency_name)
+      expect(status.exitstatus).to eq 0
+      expect(default_version).to eq '5.0.1'
+    end
+  end
+
   context 'manifest with multiple defaults for the requested dependency' do
     let(:manifest_contents) { <<-MANIFEST
 ---
@@ -139,6 +163,8 @@ default_versions:
     version: 0.0.1
 
 dependencies:
+  - name: Testlang
+    version: 11.0.1
   - name: Testlang
     version: 11.0.2
   - name: SomethingElse

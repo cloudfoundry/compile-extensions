@@ -28,7 +28,10 @@ class DefaultVersionIdentifier
 
   def run
     dependency_defaults = default_dependency_versions.select { |default_dependency_versions_entry| default_dependency_versions_entry['name'] == requested_dependency_name }
-    verify_single_default_dependency_version_provided(dependency_defaults)
+		if dependency_defaults.empty?
+			dependency_defaults = @dependencies.select { |d| d['name'] == requested_dependency_name }
+		end
+		verify_single_default_dependency_version_provided(dependency_defaults)
 
     default_dependency_version = dependency_defaults.first['version']
     verify_availability_of_requested_dependency(requested_dependency_name, default_dependency_version, dependencies)
