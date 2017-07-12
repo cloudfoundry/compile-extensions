@@ -100,7 +100,7 @@ module CompileExtensions
 
     def manifest_to_semver(version, name)
       case name
-      when 'dotnet'
+      when 'dotnet', 'dotnet-framework'
         # needed for ruby 1.9.1 support
         version.gsub('-','.')
       when 'jruby'
