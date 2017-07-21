@@ -33,6 +33,7 @@ if deps_dir && File.exist?(deps_dir)
 
   if builder.ld_library_path != ""
 		script_contents += section("LD_LIBRARY_PATH", builder.ld_library_path)
+		script_contents += section("LIBRARY_PATH", builder.ld_library_path)
   end
 
   File.write(File.join(profiled_dir, '000_multi-supply.sh'), script_contents) if script_contents != ""

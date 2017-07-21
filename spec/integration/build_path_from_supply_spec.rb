@@ -38,7 +38,13 @@ describe 'build path from supply' do
           ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib"
         end
 
-        expect(stdout.split("\n")).to eq [path, ld_library_path]
+        if ENV['LIBRARY_PATH'].to_s.length > 0
+          library_path = "LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib:#{ENV['LIBRARY_PATH']}"
+        else
+          library_path = "LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib"
+        end
+
+        expect(stdout.split("\n")).to eq [path, ld_library_path, library_path]
       end
     end
 
@@ -87,7 +93,13 @@ describe 'build path from supply' do
           ld_library_path = "LD_LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib"
         end
 
-        expect(stdout.split("\n")).to eq [ld_library_path]
+        if ENV['LIBRARY_PATH'].to_s.length > 0
+          library_path = "LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib:#{ENV['LIBRARY_PATH']}"
+        else
+          library_path = "LIBRARY_PATH=#{deps_dir}/02/lib:#{deps_dir}/01/lib"
+        end
+
+        expect(stdout.split("\n")).to eq [ld_library_path, library_path]
       end
     end
 

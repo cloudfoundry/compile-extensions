@@ -27,6 +27,7 @@ if deps_dir && File.exist?(deps_dir)
 
   if builder.ld_library_path != ""
     create_env_string("LD_LIBRARY_PATH", builder.ld_library_path)
+    create_env_string("LIBRARY_PATH", builder.ld_library_path)
   end
 
   include_path = builder.include_path
