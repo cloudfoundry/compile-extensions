@@ -29,7 +29,7 @@ class DefaultVersionIdentifier
   def run
     dependency_defaults = default_dependency_versions.select { |default_dependency_versions_entry| default_dependency_versions_entry['name'] == requested_dependency_name }
 		if dependency_defaults.empty?
-			dependency_defaults = @dependencies.select { |d| d['name'] == requested_dependency_name && d['cf_stacks'].include?(ENV['CF_STACK']) }
+			dependency_defaults = @dependencies.select { |d| d['name'] == requested_dependency_name && (d['cf_stacks'].nil? || d['cf_stacks'].include?(ENV['CF_STACK'])) }
 		end
 		verify_single_default_dependency_version_provided(dependency_defaults)
 
