@@ -8,7 +8,10 @@ require 'fileutils'
 
 deps_dir = ARGV[0]
 build_dir = ARGV[1]
-profiled_dir = File.join(build_dir, '.profile.d')
+profiled_dir = ARGV[2].to_s
+if profiled_dir == '' then
+  profiled_dir = File.join(build_dir, '.profile.d')
+end
 
 def section(env_var, env_val)
 <<-HERE

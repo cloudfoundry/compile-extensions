@@ -3,12 +3,13 @@ require 'fileutils'
 require 'open3'
 
 describe 'write .profile.d from supply' do
-  def run_write_profiled_from_supply(deps_dir, build_dir)
-    Open3.capture3("./bin/write_profiled_from_supply #{deps_dir} #{build_dir}")
+  def run_write_profiled_from_supply(deps_dir, build_dir, profile_dir='')
+    Open3.capture3("./bin/write_profiled_from_supply #{deps_dir} #{build_dir} #{profile_dir}")
   end
 
   let(:build_dir) { Dir.mktmpdir }
-  let(:profiled_script) {File.join(build_dir, ".profile.d", "000_multi-supply.sh")}
+  let(:profile_dir)  { File.join(build_dir, ".profile.d") }
+  let(:profiled_script) {File.join(profile_dir, "000_multi-supply.sh")}
 
   context 'deps dir exists' do
     let(:deps_dir)  { Dir.mktmpdir }
@@ -90,6 +91,32 @@ describe 'write .profile.d from supply' do
       _, _, status = run_write_profiled_from_supply("not exist", build_dir)
       expect(status.exitstatus).to eq 0
       expect(File.exist?(profiled_script)).to be false
+    end
+  end
+
+  context 'profile.d is passed in' do
+    let(:deps_dir)  { Dir.mktmpdir }
+    let(:profile_dir)  { Dir.mktmpdir }
+
+    before do
+      FileUtils.mkdir_p("#{deps_dir}/00/bin")
+      FileUtils.mkdir_p("#{deps_dir}/01/bin")
+      FileUtils.mkdir_p("#{deps_dir}/01/lib")
+      FileUtils.mkdir_p("#{deps_dir}/02/lib")
+    end
+
+    after do
+      FileUtils.rm_rf(deps_dir)
+      FileUtils.rm_rf(profile_dir)
+    end
+
+    it 'writes appropriate export commands to specified profile.d' do
+      _, _, status = run_write_profiled_from_supply(deps_dir, build_dir, profile_dir)
+      expect(status.exitstatus).to eq 0
+
+      content = File.read(profiled_script)
+      expect(content).to include 'export PATH="$DEPS_DIR/01/bin:$DEPS_DIR/00/bin:$PATH"'
+      expect(content).to include 'export LD_LIBRARY_PATH="$DEPS_DIR/02/lib:$DEPS_DIR/01/lib:$LD_LIBRARY_PATH"'
     end
   end
 end
