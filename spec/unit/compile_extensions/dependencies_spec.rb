@@ -245,13 +245,13 @@ module CompileExtensions
           - name: node
             version: 4.8.2
             uri: https://buildpacks.cloudfoundry.org/dependencies/node/node-4.8.2-linux-x64-09d53abc.tgz
-            md5: 09d53abca4f08cf63b9eb88b7175266f
+            sha256: 65744e71503374a1dc455a0a05cc682c777d8af564626973c578e76da8d9112d
             cf_stacks:
             - cflinuxfs2
           - name: node
             version: 4.8.3
             uri: https://buildpacks.cloudfoundry.org/dependencies/node/node-4.8.3-linux-x64-0622641b.tgz
-            md5: 0622641b64386fdfcaa82da4987a1105
+            sha256: e9b2b0987652072f3a6c1fa9cb3c0b8e4f9b1fc8264c7b0feef6450b7d21820f
             cf_stacks:
             - cflinuxfs2
         MANIFEST

@@ -29,14 +29,14 @@ if !status.success?
 	exit 3
 end
 
-generated_md5 = Digest::MD5.file(file_location).hexdigest
+generated_sha256 = Digest::SHA256.file(file_location).hexdigest
 
 puts filtered_uri
 
-if dependency['md5'] == generated_md5
+if dependency['sha256'] == generated_sha256
   exit 0
 else
-  puts "DEPENDENCY_MD5_MISMATCH for #{filtered_uri}: generated md5: #{generated_md5}, expected md5: #{dependency['md5']}"
+  puts "DEPENDENCY_SHA256_MISMATCH for #{filtered_uri}: generated sha256: #{generated_sha256}, expected sha256: #{dependency['sha256']}"
   FileUtils.rm(file_location)
   exit 3
 end

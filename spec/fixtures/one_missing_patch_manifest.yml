@@ -3,24 +3,24 @@ dependencies:
   - name: go
     version: 1.5
     uri: https://storage.googleapis.com/golang/go1.5.linux-amd64.tar.gz
-    md5: braaaiiiins
+    sha256: braaaiiiins
     cf_stacks:
       - cflinuxfs2
   - name: go
     version: 1.5.1
     uri: https://storage.googleapis.com/golang/go1.5.1.linux-amd64.tar.gz
-    md5: 73fe663350c79d73b16f3f7a899ae61e
+    sha256: 2593132ca490b9ee17509d65ee2cd078441ff544899f6afb97a03d08c25524e7
     cf_stacks:
       - cflinuxfs2
   - name: go
     version: 1.5.2
     uri: https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz
-    md5: 7326543a5282cac87a892d8289714777
+    sha256: b8041ec8a7c0da29dab0b110206794d016165d6d0806976d39b7a99d899aa015
     cf_stacks:
       - cflinuxfs2
   - name: go
     version: 1.5.3
     uri: https://storage.googleapis.com/golang/go1.5.3.linux-amd64.tar.gz
-    md5: 31717324cabc5f8c537deee00a5a2b3c
+    sha256: 43afe0c5017e502630b1aea4d44b8a7f059bf60d7f29dfd58db454d4e4e0ae53
     cf_stacks:
       - cflinuxfs2

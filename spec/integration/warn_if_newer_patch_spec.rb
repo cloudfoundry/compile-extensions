@@ -36,25 +36,25 @@ dependencies:
   - name: dependency
     version: 1.2.3
     uri: file://dependency.1.2.3.txt
-    md5: 123456
+    sha256: 123456
     cf_stacks:
       - cflinuxfs2
   - name: dependency
     version: 1.2.4
     uri: file://dependency.1.2.4.txt
-    md5: 987654
+    sha256: 987654
     cf_stacks:
       - cflinuxfs2
   - name: node
     version: 4.5.0
     uri: file://node.4.5.0.txt
-    md5: 111111
+    sha256: 111111
     cf_stacks:
       - cflinuxfs2
   - name: node
     version: 4.6.0
     uri: file://node.4.6.0.txt
-    md5: 222222
+    sha256: 222222
     cf_stacks:
       - cflinuxfs2
       MANIFEST
@@ -141,19 +141,19 @@ dependencies:
   - name: dependency
     version: 1.1.1
     uri: file://dependency.1.1.1.txt
-    md5: 123456
+    sha256: 123456
     cf_stacks:
       - cflinuxfs2
   - name: dependency
     version: 1.2.3
     uri: file://dependency.1.2.3.txt
-    md5: 123456
+    sha256: 123456
     cf_stacks:
       - cflinuxfs2
   - name: dependency
     version: 1.3.1
     uri: file://dependency.1.3.1.txt
-    md5: 987654
+    sha256: 987654
     cf_stacks:
       - cflinuxfs2
       MANIFEST

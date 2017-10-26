@@ -3,31 +3,31 @@ dependencies:
   - name: go
     version: 1.4.1
     uri: https://storage.googleapis.com/golang/go1.4.1.linux-amd64.tar.gz
-    md5: ba9696cb65817d04f1a12c358ff7d376
+    sha256: 68170d5d48fc317155e69d2b55e4c09878433462ddb77d7900db6590ce2bef49
     cf_stacks:
       - cflinuxfs2
   - name: go
     version: 1.4.2
     uri: https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz
-    md5: cdc1ff96c6c99b918402693a5cf0e1f3
+    sha256: 141b8345932641483c2437bdbd65488a269282ac85f91170805c273f03dd223b
     cf_stacks:
       - cflinuxfs2
   - name: go
     version: 1.4.3
     uri: https://storage.googleapis.com/golang/go1.4.3.linux-amd64.tar.gz
-    md5: 814fad4ac7dedfb5e286df83cdc7fc21
+    sha256: ce3140662f45356eb78bc16a88fc7cfb29fb00e18d7c632608245b789b2086d2
     cf_stacks:
       - cflinuxfs2
   - name: go
     version: 1.5.2
     uri: https://storage.googleapis.com/golang/go1.5.2.linux-amd64.tar.gz
-    md5: 7326543a5282cac87a892d8289714777
+    sha256: b8041ec8a7c0da29dab0b110206794d016165d6d0806976d39b7a99d899aa015
     cf_stacks:
       - cflinuxfs2
   - name: go
     version: 1.5.3
     uri: https://storage.googleapis.com/golang/go1.5.3.linux-amd64.tar.gz
-    md5: 31717324cabc5f8c537deee00a5a2b3c
+    sha256: 43afe0c5017e502630b1aea4d44b8a7f059bf60d7f29dfd58db454d4e4e0ae53
     cf_stacks:
       - cflinuxfs2
 

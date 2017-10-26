@@ -15,7 +15,7 @@ manifest          = YAML.load_file(manifest_location)
 dependencies      = CompileExtensions::Dependencies.new(manifest)
 translated_uri    = CompileExtensions::URITranslator.translate(original_url)
 filtered_uri      = CompileExtensions::URITranslator.filter_uri(translated_uri)
-dependency_md5    = dependencies.find_md5(original_url)
+dependency_sha256 = dependencies.find_sha256(original_url)
 
 _, status = Open3.capture2e('curl', '-s', '-L', '-f', translated_uri, '-o', file_location)
 if !status.success?
@@ -23,14 +23,14 @@ if !status.success?
 	exit 3
 end
 
-generated_md5 = Digest::MD5.file(file_location).hexdigest
+generated_sha256 = Digest::SHA256.file(file_location).hexdigest
 
 puts filtered_uri
 
-if dependency_md5 == generated_md5
+if dependency_sha256 == generated_sha256
   exit 0
 else
-  puts "DEPENDENCY_MD5_MISMATCH for #{filtered_uri}: generated md5: #{generated_md5}, expected md5: #{dependency_md5}"
+  puts "DEPENDENCY_SHA256_MISMATCH for #{filtered_uri}: generated sha256: #{generated_sha256}, expected sha256: #{dependency_sha256}"
   FileUtils.rm(file_location)
   exit 3
 end

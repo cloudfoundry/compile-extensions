@@ -22,19 +22,19 @@ dependencies:
     uri: https://some_url.com/somthing3
     cf_stacks:
       - cflinuxfs2
-    md5: 654321
+    sha256: 654321
   - name: something
     version: 0
     uri: #{manifest_url}
     cf_stacks:
       - cflinuxfs2
-    md5: #{md5}
+    sha256: #{sha256}
   - name: something
     version: 2
     uri: https://some_url.com/somthing2
     cf_stacks:
       - cflinuxfs2
-    md5: 12345
+    sha256: 12345
       MANIFEST
     end
   end
@@ -45,7 +45,7 @@ dependencies:
     path
   end
   let(:manifest_url) { "file://#{file_path}" }
-  let(:md5)          { Digest::MD5.file(file_path).hexdigest }
+  let(:sha256)       { Digest::SHA256.file(file_path).hexdigest }
 
   before do
     base_dir = File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
@@ -101,13 +101,13 @@ dependencies:
     end
 
     context 'When downloaded file has invalid checksum' do
-      let(:md5) { Digest::MD5.hexdigest('something else') }
+      let(:sha256) { Digest::SHA256.hexdigest('something else') }
 
       it %Q{the process ends with failing exit code,
             and is '3' because of the PHP buildpack behaviour} do
         stdout, _, status = run_download_dependency_by_name('something', '0', "#{install_directory}/something.txt")
-        generated_checksum = Digest::MD5.file(file_path).hexdigest
-        expect(stdout.chomp).to match(/DEPENDENCY_MD5_MISMATCH for .*something\.txt: generated md5: #{Regexp.quote(generated_checksum)}, expected md5: #{Regexp.quote(md5)}/)
+        generated_checksum = Digest::SHA256.file(file_path).hexdigest
+        expect(stdout.chomp).to match(/DEPENDENCY_SHA256_MISMATCH for .*something\.txt: generated sha256: #{Regexp.quote(generated_checksum)}, expected sha256: #{Regexp.quote(sha256)}/)
         expect(status.exitstatus).to eq 3
       end
 
@@ -151,7 +151,7 @@ dependencies:
 
   context 'download URI gives a redirect' do
     let(:manifest_url) { 'http://my.package.com/package.txt' }
-    let(:md5)          { Digest::MD5.hexdigest 'blah blee' }
+    let(:sha256)       { Digest::SHA256.hexdigest 'blah blee' }
 
     before do
       proxy.start
@@ -176,7 +176,7 @@ dependencies:
 
   context 'download URI does not exist' do
     let(:manifest_url) { 'http://my.package.com/package.txt' }
-    let(:md5)          { Digest::MD5.hexdigest 'blah blee' }
+    let(:sha256)       { Digest::SHA256.hexdigest 'blah blee' }
 
     before do
       proxy.start
