@@ -41,5 +41,5 @@ if deps_dir && File.exist?(deps_dir)
 
   File.write(File.join(profiled_dir, '000_multi-supply.sh'), script_contents) if script_contents != ""
 
-  builder.copy_profile_d_scripts(build_dir)
+  builder.copy_profile_d_scripts(profiled_dir)
 end

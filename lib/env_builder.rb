@@ -30,8 +30,7 @@ class EnvBuilder
     end
   end
 
-  def copy_profile_d_scripts(build_dir)
-    output_dir = File.join(build_dir, ".profile.d")
+  def copy_profile_d_scripts(output_dir)
     FileUtils.mkdir_p(output_dir)
 
     Dir.chdir(@deps_dir) do

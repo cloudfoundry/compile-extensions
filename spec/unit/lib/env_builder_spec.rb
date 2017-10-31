@@ -3,7 +3,7 @@ require 'tmpdir'
 require 'fileutils'
 
 describe EnvBuilder do
-  let(:build_dir)   { Dir.mktmpdir }
+  let(:profiled_dir)   { Dir.mktmpdir }
   let(:deps_dir)    { Dir.mktmpdir }
   let(:deps_prefix) { 'arbitrary_string' }
 
@@ -34,7 +34,7 @@ describe EnvBuilder do
 
   after do
     FileUtils.rm_rf(deps_dir)
-    FileUtils.rm_rf(build_dir)
+    FileUtils.rm_rf(profiled_dir)
   end
 
   describe '#path' do
@@ -73,10 +73,10 @@ describe EnvBuilder do
 
   describe '#copy_profile_d_scripts' do
     it 'copies the scripts to <buildDir>/.profile.d, prefixing with IDX' do
-      subject.copy_profile_d_scripts(build_dir)
-      expect(File.read("#{build_dir}/.profile.d/02_thing-one.sh")).to eq "xxx"
-      expect(File.read("#{build_dir}/.profile.d/06_thing-two.sh")).to eq "zzz"
-      expect(File.read("#{build_dir}/.profile.d/09_thing-one.sh")).to eq "yyy"
+      subject.copy_profile_d_scripts(profiled_dir)
+      expect(File.read("#{profiled_dir}/02_thing-one.sh")).to eq "xxx"
+      expect(File.read("#{profiled_dir}/06_thing-two.sh")).to eq "zzz"
+      expect(File.read("#{profiled_dir}/09_thing-one.sh")).to eq "yyy"
     end
   end
 end
