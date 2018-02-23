@@ -1,3 +1,7 @@
+# Deprecated
+
+This repo has been deprecated in favor of https://github.com/cloudfoundry/libbuildpack
+
 # compile extensions
 
 A library which provides extra functions and overrides for Cloud
