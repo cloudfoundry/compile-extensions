@@ -27,7 +27,9 @@ module CompileExtensions
       end
 
       def warning?
-        @date && (@date.to_date - Date.today).to_i <= 30
+        return false unless @date
+        date = @date.is_a?(String) ? Date.parse(@date, false) : @date
+        (date - Date.today).to_i <= 30
       end
     end
   end
