@@ -140,7 +140,7 @@ module CompileExtensions
     end
 
     def dependency_satisfies_current_stack(dependency)
-      dependency['cf_stacks'].include?(stack)
+      @manifest['stack'] || dependency['cf_stacks'].include?(stack)
     end
 
     def stack

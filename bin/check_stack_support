@@ -3,8 +3,13 @@
 require 'yaml'
 manifest_path = File.join(File.dirname(__FILE__), '..', '..', 'manifest.yml')
 manifest = YAML.load_file(manifest_path)
-dependency = manifest['dependencies'].find do |dependency|
-  dependency['cf_stacks'].include?(ENV['CF_STACK'])
+
+if manifest['stack']
+	dependency = manifest['stack'] == ENV['CF_STACK']
+else
+  dependency = manifest['dependencies'].find do |dependency|
+    dependency['cf_stacks'].include?(ENV['CF_STACK'])
+  end
 end
 
 unless dependency
