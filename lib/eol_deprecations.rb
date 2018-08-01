@@ -1,3 +1,5 @@
+require 'date'
+
 module CompileExtensions
   class EolDeprecations
     def initialize(manifest)
