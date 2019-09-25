@@ -144,7 +144,7 @@ module CompileExtensions
     end
 
     def stack
-      ENV['CF_STACK'] || 'cflinuxfs2'
+      ENV['CF_STACK'] || 'cflinuxfs3'
     end
   end
 end

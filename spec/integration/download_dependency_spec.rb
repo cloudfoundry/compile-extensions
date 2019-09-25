@@ -28,7 +28,7 @@ dependencies:
     version: 0
     uri: #{manifest_url}
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
     sha256: #{sha256}
       MANIFEST
     end

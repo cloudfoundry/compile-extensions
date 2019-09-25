@@ -10,19 +10,19 @@ dependencies:
     version: 1.9.3
     uri: http://thong.co.nz/file.tgz
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
   -
     name: ruby
     version: 2.1.1
     uri: http://some.other.repo/ruby-two-one-one.tgz
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
   -
     name: jruby
     version: 1.9.3::1.7.0
     uri: http://another.repo/jruby_1.9.3_jdk_1.7.0.tgz
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
     MANIFEST
   end
 
@@ -77,7 +77,7 @@ dependencies:
     version: 1.9.3::1.7.0
     uri: http://another.repo/lucid64/jruby_1.9.3_jdk_1.7.0.tgz
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
         MANIFEST
       end
 
@@ -94,12 +94,12 @@ dependencies:
   context 'when the stack is supported' do
     shared_examples_for :a_supported_stack do
       it 'gives no message in stderr' do
-        stdout, stderr, process = run_check_stack_support('cflinuxfs2')
+        stdout, stderr, process = run_check_stack_support('cflinuxfs3')
         expect(stderr).to eq('')
       end
 
       it 'exits sucessfully' do
-        stdout, stderr, process = run_check_stack_support('cflinuxfs2')
+        stdout, stderr, process = run_check_stack_support('cflinuxfs3')
 
         expect(process).to be_success
       end
@@ -118,11 +118,11 @@ dependencies:
     uri: http://another.repo/lucid64/jruby_1.9.3_jdk_1.7.0.tgz
     cf_stacks:
       - lucid64
-  - name: jruby-cflinuxfs2
+  - name: jruby-cflinuxfs3
     version: 1.9.3::1.7.0
-    uri: http://another.repo/cflinuxfs2/jruby_1.9.3_jdk_1.7.0.tgz
+    uri: http://another.repo/cflinuxfs3/jruby_1.9.3_jdk_1.7.0.tgz
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
       MANIFEST
       end
 

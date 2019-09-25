@@ -21,19 +21,19 @@ dependencies:
     version: 3
     uri: https://some_url.com/somthing3
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
     sha256: 654321
   - name: something
     version: 0
     uri: #{manifest_url}
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
     sha256: #{sha256}
   - name: something
     version: 2
     uri: https://some_url.com/somthing2
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
     sha256: 12345
       MANIFEST
     end

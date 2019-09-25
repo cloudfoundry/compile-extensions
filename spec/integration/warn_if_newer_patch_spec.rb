@@ -38,25 +38,25 @@ dependencies:
     uri: file://dependency.1.2.3.txt
     sha256: 123456
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
   - name: dependency
     version: 1.2.4
     uri: file://dependency.1.2.4.txt
     sha256: 987654
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
   - name: node
     version: 4.5.0
     uri: file://node.4.5.0.txt
     sha256: 111111
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
   - name: node
     version: 4.6.0
     uri: file://node.4.6.0.txt
     sha256: 222222
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
       MANIFEST
     end
 
@@ -143,19 +143,19 @@ dependencies:
     uri: file://dependency.1.1.1.txt
     sha256: 123456
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
   - name: dependency
     version: 1.2.3
     uri: file://dependency.1.2.3.txt
     sha256: 123456
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
   - name: dependency
     version: 1.3.1
     uri: file://dependency.1.3.1.txt
     sha256: 987654
     cf_stacks:
-      - cflinuxfs2
+      - cflinuxfs3
       MANIFEST
     end
 

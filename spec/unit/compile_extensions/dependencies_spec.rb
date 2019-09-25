@@ -26,9 +26,9 @@ module CompileExtensions
               'name' => 'both_stacks_widget'
             },
             {
-              'match' => /cflinuxfs2_stack_widget/,
+              'match' => /cflinuxfs3_stack_widget/,
               'version' => '1',
-              'name' => 'cflinuxfs2_stack_widget'
+              'name' => 'cflinuxfs3_stack_widget'
             },
           ],
           'dependencies' => [
@@ -46,9 +46,9 @@ module CompileExtensions
             },
             {
               'version' => '1',
-              'name' => 'cflinuxfs2_stack_widget',
-              'uri' => 'cflinuxfs2_stack_dep',
-              'cf_stacks' => ['cflinuxfs2']
+              'name' => 'cflinuxfs3_stack_widget',
+              'uri' => 'cflinuxfs3_stack_dep',
+              'cf_stacks' => ['cflinuxfs3']
             },
 
           ]
@@ -98,15 +98,15 @@ module CompileExtensions
           ENV.delete('CF_STACK')
         end
 
-        context 'dependency that matches the cflinuxfs2 stack' do
-          let(:original_url) { 'cflinuxfs2_stack_widget' }
+        context 'dependency that matches the cflinuxfs3 stack' do
+          let(:original_url) { 'cflinuxfs3_stack_widget' }
 
           specify do
-            expect(matching_dependency['uri']).to eql('cflinuxfs2_stack_dep')
+            expect(matching_dependency['uri']).to eql('cflinuxfs3_stack_dep')
           end
         end
 
-        context 'dependency that does not match the cflinuxfs2 stack' do
+        context 'dependency that does not match the cflinuxfs3 stack' do
           let(:original_url) { 'first_stack_widget' }
 
           specify do
@@ -141,25 +141,25 @@ module CompileExtensions
               'version' => 'one',
               'name' => 'my_dog',
               'uri' => 'my_dog_has_fleas-v1',
-              'cf_stacks' => ['cflinuxfs2']
+              'cf_stacks' => ['cflinuxfs3']
             },
             {
               'version' => 'two',
               'name' => 'green',
               'uri' => 'i_do_not_like_green_eggs_and_ham-v2',
-              'cf_stacks' => ['cflinuxfs2']
+              'cf_stacks' => ['cflinuxfs3']
             },
             {
               'version' => '1.9.3',
               'name' => 'ruby',
               'uri' => 'http://cf.buildpacks.com/ruby-1.9.3.tgz',
-              'cf_stacks' => ['cflinuxfs2']
+              'cf_stacks' => ['cflinuxfs3']
             },
             {
               'version' => 1.9,
               'name' => 'ruby',
               'uri' => 'http://cf.buildpacks.com/ruby-1.9.tgz',
-              'cf_stacks' => ['cflinuxfs2']
+              'cf_stacks' => ['cflinuxfs3']
             }
           ]
         }
@@ -247,17 +247,17 @@ module CompileExtensions
             uri: https://buildpacks.cloudfoundry.org/dependencies/node/node-4.8.2-linux-x64-09d53abc.tgz
             sha256: 65744e71503374a1dc455a0a05cc682c777d8af564626973c578e76da8d9112d
             cf_stacks:
-            - cflinuxfs2
+            - cflinuxfs3
           - name: node
             version: 4.8.3
             uri: https://buildpacks.cloudfoundry.org/dependencies/node/node-4.8.3-linux-x64-0622641b.tgz
             sha256: e9b2b0987652072f3a6c1fa9cb3c0b8e4f9b1fc8264c7b0feef6450b7d21820f
             cf_stacks:
-            - cflinuxfs2
+            - cflinuxfs3
         MANIFEST
       end
       let(:manifest)   { YAML.load(manifest_contents) }
-      let(:stack) { 'cflinuxfs2' }
+      let(:stack) { 'cflinuxfs3' }
       before do
         ENV['CF_STACK'] = stack
       end
