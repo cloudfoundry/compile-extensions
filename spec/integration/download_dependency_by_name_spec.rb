@@ -69,7 +69,7 @@ dependencies:
 
     it 'displays the translated uri to STDOUT' do
       stdout, _, _ = run_download_dependency_by_name('something', '0', "#{install_directory}/something.txt")
-      expect(stdout.chomp).to include("file://#{cached_file_location}")
+      expect(stdout.chomp).to include(cached_file_location)
     end
   end
 
@@ -88,14 +88,10 @@ dependencies:
       context 'the uri contains credentials' do
         let(:manifest_url) { "file://#{credentials}@#{file_path}" }
 
-        it 'does not write credentials to STDOUT' do
+        it 'ignores the credentials' do
           stdout, _, _ = run_download_dependency_by_name('something', '0', "#{install_directory}/something.txt")
+          expect(stdout.chomp).to include('file:///')
           expect(stdout.chomp).not_to include(credentials)
-        end
-
-        it 'redacts credentials from STDOUT' do
-          stdout, _, _ = run_download_dependency_by_name('something', '0', "#{install_directory}/something.txt")
-          expect(stdout.chomp).to include(redacted)
         end
       end
     end
@@ -114,14 +110,10 @@ dependencies:
       context 'the uri contains credentials' do
         let(:manifest_url) { "file://#{credentials}@#{file_path}" }
 
-        it 'does not write credentials to STDOUT' do
+        it 'ignores the credentials' do
           stdout, _, _ = run_download_dependency_by_name('something', '0', "#{install_directory}/something.txt")
+          expect(stdout.chomp).to include('file:///')
           expect(stdout.chomp).not_to include(credentials)
-        end
-
-        it 'redacts credentials from STDOUT' do
-          stdout, _, _ = run_download_dependency_by_name('something', '0', "#{install_directory}/something.txt")
-          expect(stdout.chomp).to include(redacted)
         end
       end
 

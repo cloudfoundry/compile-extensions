@@ -35,18 +35,7 @@ module CompileExtensions
         uri_obj.password = "-redacted-" if uri_obj.password
       end
 
-      if uri_obj.scheme == 'file'
-        safe_uri = repair_file_uri(uri_obj)
-      else
-        safe_uri = uri_obj.to_s
-      end
-
-      safe_uri
-    end
-
-    def self.repair_file_uri(uri_obj)
-      ## URI("file:///directory/thing.tgz").to_s -> "file:/directory/thing.tgz"
-      uri_obj.to_s.sub("file:", "file://")
+      uri_obj.to_s
     end
   end
 end

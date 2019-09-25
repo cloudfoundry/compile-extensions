@@ -23,10 +23,10 @@ describe 'filtered_dependency_url' do
     context 'the uri is a file' do
       let(:original_url) { "file://#{credentials}@/file/path/would/go/here.txt" }
 
-      it 'redacts the credentials' do
+      it 'ignores credentials' do
         filtered_url, _, _ = run_filter
 
-        expect(filtered_url).to eq("file://#{redacted}@/file/path/would/go/here.txt\n")
+        expect(filtered_url).to eq("file:///file/path/would/go/here.txt\n")
       end
     end
 

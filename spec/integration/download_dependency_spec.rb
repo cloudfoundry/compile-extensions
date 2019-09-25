@@ -64,7 +64,7 @@ dependencies:
 
     it 'displays the translated uri to STDOUT' do
       stdout, _, _ = run_download_dependency(manifest_url)
-      expect(stdout.chomp).to include("file://#{cached_file_location}")
+      expect(stdout.chomp).to include(cached_file_location)
     end
   end
 
@@ -83,14 +83,10 @@ dependencies:
       context 'the uri contains credentials' do
         let(:manifest_url) { "file://#{credentials}@#{file_path}" }
 
-        it 'does not write credentials to STDOUT' do
+        it 'ignores the credentials' do
           stdout, _ , _ = run_download_dependency(file_path)
+          expect(stdout.chomp).to include('file:///')
           expect(stdout.chomp).not_to include(credentials)
-        end
-
-        it 'redacts credentials from STDOUT' do
-          stdout, _ , _ = run_download_dependency(file_path)
-          expect(stdout.chomp).to include(redacted)
         end
       end
     end
@@ -109,14 +105,10 @@ dependencies:
       context 'the uri contains credentials' do
         let(:manifest_url) { "file://#{credentials}@#{file_path}" }
 
-        it 'does not write credentials to STDOUT' do
+        it 'ignores the credentials' do
           stdout, _ , _ = run_download_dependency(file_path)
+          expect(stdout.chomp).to include('file:///')
           expect(stdout.chomp).not_to include(credentials)
-        end
-
-        it 'it redacts credentials from STDOUT' do
-          stdout, _ , _ = run_download_dependency(file_path)
-          expect(stdout.chomp).to include(redacted)
         end
       end
 
@@ -133,14 +125,10 @@ dependencies:
     context 'the input contains credentials' do
       let(:input) { "file://#{credentials}@#{file_path}" }
 
-      it 'does not write credentials to STDOUT' do
+      it 'ignores the credentials' do
         stdout, _ , _ = run_download_dependency(input)
+        expect(stdout.chomp).to include('file:///')
         expect(stdout.chomp).not_to include(credentials)
-      end
-
-      it 'redacts credentials from STDOUT' do
-        stdout, _ , _ = run_download_dependency(input)
-        expect(stdout.chomp).to include(redacted)
       end
     end
 
