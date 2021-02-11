@@ -6,10 +6,12 @@ buildpack_dir = ARGV[0]
 dep_dir = ARGV[1]
 
 manifest = YAML.load_file(File.join(buildpack_dir, 'manifest.yml'))
+version = File.read(File.join(buildpack_dir, 'VERSION'))
 
 config = {
 	'name' => manifest['language'],
-	'config' => {}
+	'config' => {},
+	'version' => version
 }
 
 File.write(File.join(dep_dir, 'config.yml'), config.to_yaml)

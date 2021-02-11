@@ -17,7 +17,10 @@ language: perl
 dependencies: []
 MANIFEST
 
+    version_contents = '1.2.3'
+
     File.write(File.join(buildpack_dir, 'manifest.yml'), manifest_contents)
+    File.write(File.join(buildpack_dir, 'VERSION'), version_contents)
   end
 
   after do
@@ -29,6 +32,6 @@ MANIFEST
     _, _, status = run_write_config_yml(buildpack_dir, dep_dir)
     expect(status.exitstatus).to eq 0
 
-    expect(YAML.load_file(File.join(dep_dir, 'config.yml'))).to eq({ 'name' => 'perl', 'config' => {} })
+    expect(YAML.load_file(File.join(dep_dir, 'config.yml'))).to eq({ 'name' => 'perl', 'config' => {}, 'version' => '1.2.3' })
   end
 end
